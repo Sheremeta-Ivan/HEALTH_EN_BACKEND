@@ -40,11 +40,8 @@ const register = async (req, res) => {
       name: data.name,
       email: data.email,
       gender: data.gender,
-      age: data.age,
-      height: data.height,
       weight: data.weight,
       goal: data.goal,
-      activity: data.activity,
       avatarURL: data.avatarURL,
     },
   });
@@ -77,17 +74,14 @@ const login = async (req, res) => {
     }
   );
 
-  res.json({
+  res.status(201).json({
     token: data.token,
     data: {
       name: data.name,
       email: data.email,
       gender: data.gender,
-      age: data.age,
-      height: data.height,
       weight: data.weight,
       goal: data.goal,
-      activity: data.activity,
       avatarURL: data.avatarURL,
     },
   });
