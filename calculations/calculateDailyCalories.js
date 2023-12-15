@@ -4,7 +4,8 @@ const {
 } = require("../constants/caloriesConstants");
 
 const calculateDailyCalories = (userData) => {
-  const { age, weight, height, gender, activity } = userData;
+  const { age, height, gender, activity } = userData;
+  const weight = userData.weight.kg;
   let {
     BASE_METABOLIC_RATE,
     WEIGHT_COEFFICIENT,

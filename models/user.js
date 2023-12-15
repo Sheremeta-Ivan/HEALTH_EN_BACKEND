@@ -50,10 +50,16 @@ const userSchema = new Schema(
     },
 
     weight: {
-      type: Number,
-      min: 4,
-      max: 300,
-      required: [true, "Set weight for user"],
+      kg: {
+        type: Number,
+        min: 4,
+        max: 300,
+        required: [true, "Set weight for user"],
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now,
+      },
     },
 
     height: {
@@ -105,9 +111,7 @@ const registerSchema = Joi.object({
   }),
   height: Joi.number().min(120).max(220).required(),
   goal: Joi.string().valid("lose fat", "maintain", "gain muscle").required(),
-  activity: Joi.number()
-    .valid(1.2, 1.375, 1.55, 1.725, 1.9)
-    .required(),
+  activity: Joi.number().valid(1.2, 1.375, 1.55, 1.725, 1.9).required(),
   dailyCalories: Joi.number(),
   dailyWater: Joi.number(),
   dailyNutrition: Joi.object({
@@ -115,6 +119,7 @@ const registerSchema = Joi.object({
     protein: Joi.number(),
     fat: Joi.number(),
   }),
+  token: Joi.string(),
 });
 
 const emailSchema = Joi.object({

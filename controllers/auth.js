@@ -1,6 +1,9 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
+const calculateDailyCalories = require("../calculations/calculateDailyCalories");
+const calculateDailyNutrition = require("../calculations/calculateDailyNutrition");
+const calculateDailyWater = require("../calculations/calculateDailyWater");
 
 const { User } = require("../models/user");
 
@@ -24,11 +27,40 @@ const register = async (req, res) => {
     password: hashPassword,
     avatarURL,
   });
+  const dailyCaloriesCalc = calculateDailyCalories({
+    age: newUser.age,
+    weight: newUser.weight,
+    height: newUser.height,
+    gender: newUser.gender,
+    activity: newUser.activity,
+  });
+  const dailyNutritionCalc = calculateDailyNutrition({
+    goal: newUser.goal,
+    dailyCalories: dailyCaloriesCalc,
+  });
+  const dailyWaterCalc = calculateDailyWater({
+    weight: newUser.weight,
+    activity: newUser.activity,
+  });
+
   const token = jwt.sign({ id: newUser._id }, SECRET_KEY, { expiresIn: "23h" });
+
+  // const data = await User.findOneAndUpdate(newUser._id, {
+  //  { token },
+  //   {
+  //     new: true,
+  //   }
+
+  // });
 
   const data = await User.findByIdAndUpdate(
     newUser._id,
     { token },
+    {
+      dailyCalories: dailyCaloriesCalc,
+      dailyNutrition: dailyNutritionCalc,
+      dailyWater: dailyWaterCalc,
+    },
     {
       new: true,
     }
