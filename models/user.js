@@ -132,8 +132,11 @@ const loginSchema = Joi.object({
 });
 
 const userResetPasswordSchema = Joi.object({
-  email: Joi.string().pattern(emailRegex).required(),
-  // newPassword: Joi.string().min(6).required(),
+  email: Joi.string().min(8).pattern(emailRegex).required(),
+});
+
+const validateGoal = Joi.object({
+  goal: Joi.string().valid("lose fat", "maintain", "gain muscle").required(),
 });
 
 const schemas = {
@@ -141,6 +144,7 @@ const schemas = {
   emailSchema,
   loginSchema,
   userResetPasswordSchema,
+  validateGoal,
 };
 
 const User = model("user", userSchema);

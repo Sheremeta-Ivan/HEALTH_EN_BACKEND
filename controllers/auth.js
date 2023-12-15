@@ -121,7 +121,7 @@ const forgotPassword = async (req, res) => {
   if (!user) {
     throw HttpError(401, "Email not found");
   }
-  const temporaryPassword = uuid.v4();
+  const temporaryPassword = uuid.v4().slice(0, 10);
   const hashPassword = await bcrypt.hash(temporaryPassword, 10);
   await User.findByIdAndUpdate(
     user._id,
