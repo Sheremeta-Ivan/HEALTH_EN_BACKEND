@@ -11,7 +11,7 @@ const transport = nodemailer.createTransport({
 });
 
 const sendEmail = (message) => {
-  message.from = "sheremetavanya2004@gmail.com";
+  message.from = "healthy-hub.com";
   return transport.sendMail(message);
 };
 

@@ -131,10 +131,16 @@ const loginSchema = Joi.object({
   password: Joi.string().min(8).required(),
 });
 
+const userResetPasswordSchema = Joi.object({
+  email: Joi.string().pattern(emailRegex).required(),
+  // newPassword: Joi.string().min(6).required(),
+});
+
 const schemas = {
   registerSchema,
   emailSchema,
   loginSchema,
+  userResetPasswordSchema,
 };
 
 const User = model("user", userSchema);
