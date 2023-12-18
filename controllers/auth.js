@@ -73,8 +73,6 @@ const register = async (req, res) => {
     token: data.token,
     data: {
       name: data.name,
-      email: data.email,
-      gender: data.gender,
       weight: data.weight,
       goal: data.goal,
       avatarURL: data.avatarURL,
@@ -113,8 +111,6 @@ const login = async (req, res) => {
     token: data.token,
     data: {
       name: data.name,
-      email: data.email,
-      gender: data.gender,
       weight: data.weight,
       goal: data.goal,
       avatarURL: data.avatarURL,
@@ -154,9 +150,9 @@ const forgotPassword = async (req, res) => {
     <p>Your new password is:</p>
     <b>${temporaryPassword}</b>
     <p>
-      Please change your password as soon as possible.
+      You can sign in with this password to your account in this link:
+      <a href="https://songlad.github.io/HEALTH_EN/signin">HealthyHub</a>
       <br>
-      Your new password is valid for 24 hours.
     </p>
   </main>
 </body>
@@ -178,29 +174,10 @@ const logout = async (req, res) => {
   });
 };
 
-const getCurrent = async (req, res) => {
-  const data = req.user;
-
-  res.status(200).json({
-    token: data.token,
-    data: {
-      name: data.name,
-      email: data.email,
-      gender: data.gender,
-      age: data.age,
-      height: data.height,
-      weight: data.weight,
-      goal: data.goal,
-      activity: data.activity,
-      avatarURL: data.avatarURL,
-    },
-  });
-};
-
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
-  getCurrent: ctrlWrapper(getCurrent),
+  // getCurrent: ctrlWrapper(getCurrent),
   forgotPassword: ctrlWrapper(forgotPassword),
 };

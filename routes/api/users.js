@@ -18,6 +18,8 @@ router.put(
 
 router.put("/weight", authenticate, ctrl.updateWeight);
 
-// router.post("/weight", authenticate, ctrl.addWeight);
+router.post("/water", authenticate, ctrl.addWater);
+
+router.delete("/water", authenticate, ctrl.deleteWater);
 
 module.exports = router;

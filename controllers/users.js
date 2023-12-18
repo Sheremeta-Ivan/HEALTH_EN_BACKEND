@@ -4,6 +4,7 @@ const calculateDailyCalories = require("../calculations/calculateDailyCalories")
 const calculateDailyNutrition = require("../calculations/calculateDailyNutrition");
 const calculateDailyWater = require("../calculations/calculateDailyWater");
 const { Weight } = require("../models/weight");
+const { Water } = require("../models/water");
 
 const getCurrent = async (req, res) => {
   const { _id } = req.user;
@@ -24,21 +25,25 @@ const getCurrent = async (req, res) => {
 };
 
 const updateInfo = async (req, res) => {
-  const user = await User.findById(req.user._id); // отримує користувача за його ID з токена
+  const { _id: owner } = req.user;
+  const user = await User.findById(owner);
+  const { weight } = req.body;
+  let { date } = req.body;
 
-  if (!user) {
-    return res.status(404).json({ message: "User not found" }); // Повернути помилку, якщо користувача не знайдено
+  if (!date) {
+    date = LocaleDate();
   }
 
-  // Отримайте оновлені дані з запиту
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
   const updatedData = req.body;
 
-  // Оновіть дані користувача
   for (const key in updatedData) {
     user[key] = updatedData[key];
   }
 
-  // Перерахуйте BMR/денну норму води/співвідношення макроелементів до BMR
   if (
     updatedData.age ||
     updatedData.weight ||
@@ -67,11 +72,26 @@ const updateInfo = async (req, res) => {
     user.dailyWater = dailyWaterCalc;
   }
 
-  // Збережіть оновлені дані
   await user.save();
 
-  // Поверніть оновлені дані
-  return res.status(200).json({ data: user });
+  const existingWeight = await Weight.findOne({ owner, date }).exec();
+
+  if (!existingWeight) {
+    const newWeight = await Weight.create({ owner, weight, date });
+    res.status(201).json(newWeight);
+  } else if (existingWeight.weight !== weight) {
+    const updatedWeight = await Weight.findOneAndUpdate(
+      { owner, date },
+      { weight },
+      { new: true }
+    ).exec();
+
+    if (!updatedWeight) {
+      throw HttpError(500, "Failed to update weight");
+    }
+
+    return res.status(200).json({ data: user });
+  }
 };
 
 const updateGoal = async (req, res) => {
@@ -167,9 +187,58 @@ const updateWeight = async (req, res) => {
   }
 };
 
+const addWater = async (req, res) => {
+  const { _id: owner } = req.user;
+  const { water } = req.body;
+
+  let { date } = req.body;
+
+  if (!date) {
+    date = LocaleDate();
+  }
+
+  const existingWater = await Water.findOne({ owner, date }).exec();
+
+  if (!existingWater) {
+    const newWater = await Water.create({ owner, water, date });
+    res.status(201).json(newWater);
+  } else if (existingWater.water !== water) {
+    const updatedWater = await Water.findOneAndUpdate(
+      { owner, date },
+      { water },
+      { new: true }
+    ).exec();
+
+    if (!updatedWater) {
+      throw HttpError(500, "Failed to update water");
+    }
+    res.status(200).json(updatedWater);
+  }
+};
+
+const deleteWater = async (req, res) => {
+  const { _id: owner } = req.user;
+  let { date } = req.body;
+
+  if (!date) {
+    date = LocaleDate();
+  }
+
+  const existingWater = await Water.findOne({ owner, date }).exec();
+
+  if (!existingWater) {
+    res.status(200).json({ message: `No water intake for ${date} found` });
+  } else {
+    await Water.deleteMany({ owner, date });
+    res.status(200).json({ message: `All water intake for ${date} deleted` });
+  }
+};
+
 module.exports = {
   getCurrent: ctrlWrapper(getCurrent),
   updateInfo: ctrlWrapper(updateInfo),
   updateGoal: ctrlWrapper(updateGoal),
   updateWeight: ctrlWrapper(updateWeight),
+  addWater: ctrlWrapper(addWater),
+  deleteWater: ctrlWrapper(deleteWater),
 };
