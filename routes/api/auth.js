@@ -5,9 +5,9 @@ const ctrl = require("../../controllers/auth");
 const { validateBody, authenticate } = require("../../middlewares");
 const { schemas } = require("../../models/user");
 
-router.post("/register", validateBody(schemas.registerSchema), ctrl.register);
+router.post("/signup", validateBody(schemas.registerSchema), ctrl.register);
 
-router.post("/login", validateBody(schemas.loginSchema), ctrl.login);
+router.post("/signin", validateBody(schemas.loginSchema), ctrl.login);
 
 router.post(
   "/forgot-password",
@@ -15,6 +15,6 @@ router.post(
   ctrl.forgotPassword
 );
 
-router.post("/logout", authenticate, ctrl.logout);
+router.post("/signout", authenticate, ctrl.logout);
 
 module.exports = router;
