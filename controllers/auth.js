@@ -8,6 +8,7 @@ const calculateDailyWater = require("../calculations/calculateDailyWater");
 const { sendEmail } = require("../helpers");
 
 const { User } = require("../models/user");
+const { Weight } = require("../models/weight");
 
 const { HttpError, ctrlWrapper } = require("../helpers");
 
@@ -29,6 +30,7 @@ const register = async (req, res) => {
     password: hashPassword,
     avatarURL,
   });
+
   const dailyCaloriesCalc = calculateDailyCalories({
     age: newUser.age,
     weight: newUser.weight,
@@ -61,6 +63,11 @@ const register = async (req, res) => {
       new: true,
     }
   );
+
+  await Weight.create({
+    weight: newUser.weight,
+    owner: newUser._id,
+  });
 
   res.status(201).json({
     token: data.token,

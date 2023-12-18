@@ -9,6 +9,15 @@ router.get("/current", authenticate, ctrl.getCurrent);
 
 router.put("/update", authenticate, ctrl.updateInfo);
 
-router.put("/goal", authenticate, validateBody(schemas.validateGoal), ctrl.updateGoal);
+router.put(
+  "/goal",
+  authenticate,
+  validateBody(schemas.validateGoal),
+  ctrl.updateGoal
+);
+
+router.put("/weight", authenticate, ctrl.updateWeight);
+
+// router.post("/weight", authenticate, ctrl.addWeight);
 
 module.exports = router;

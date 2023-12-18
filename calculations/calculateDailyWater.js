@@ -8,8 +8,7 @@ const {
 } = require("../constants/waterConstants");
 
 const calculateDailyWater = (userData) => {
-  const { activity } = userData;
-  const weight = userData.weight.kg;
+  const { activity, weight } = userData;
   let ACTIVITY_COEFFICIENT;
 
   switch (activity) {

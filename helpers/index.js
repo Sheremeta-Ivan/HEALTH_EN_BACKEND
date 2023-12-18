@@ -3,6 +3,7 @@ const ctrlWrapper = require("./ctrlWrapper");
 const handleMongooseError = require("./handleMongooseError");
 const adjustingAvatar = require("./adjustAvatar");
 const sendEmail = require("./sendEmail");
+const LocaleDate = require("./LocaleDate");
 
 module.exports = {
   HttpError,
@@ -10,4 +11,5 @@ module.exports = {
   handleMongooseError,
   adjustingAvatar,
   sendEmail,
+  LocaleDate,
 };

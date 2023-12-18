@@ -1,6 +1,7 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 const { handleMongooseError } = require("../helpers");
+const LocaleDate = require("../helpers/LocaleDate");
 
 const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
@@ -50,16 +51,10 @@ const userSchema = new Schema(
     },
 
     weight: {
-      kg: {
-        type: Number,
-        min: 4,
-        max: 300,
-        required: [true, "Set weight for user"],
-      },
-      createdAt: {
-        type: Date,
-        default: Date.now,
-      },
+      type: Number,
+      min: 4,
+      max: 300,
+      required: [true, "Set weight for user"],
     },
 
     height: {
@@ -93,6 +88,10 @@ const userSchema = new Schema(
       protein: Number,
       fat: Number,
     },
+    date: {
+      type: String,
+      default: () => LocaleDate(),
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -105,10 +104,7 @@ const registerSchema = Joi.object({
   password: Joi.string().min(8).required(),
   age: Joi.number().min(8).max(120).required(),
   gender: Joi.string().valid("male", "female").required(),
-  weight: Joi.object({
-    kg: Joi.number().required().min(4).max(300),
-    createdAt: Joi.date(),
-  }),
+  weight: Joi.number().min(4).max(300).required(),
   height: Joi.number().min(120).max(220).required(),
   goal: Joi.string().valid("lose fat", "maintain", "gain muscle").required(),
   activity: Joi.number().valid(1.2, 1.375, 1.55, 1.725, 1.9).required(),
