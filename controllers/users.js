@@ -94,6 +94,19 @@ const updateInfo = async (req, res) => {
   }
 };
 
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const avatarURL = req.file.path;
+
+  const updatedUser = await User.findOneAndUpdate(
+    { _id },
+    { avatarURL },
+    { new: true }
+  );
+
+  res.json({ avatarURL: updatedUser.avatarURL });
+};
+
 const updateGoal = async (req, res) => {
   const user = await User.findById(req.user._id);
   if (!user) {
@@ -241,4 +254,5 @@ module.exports = {
   updateWeight: ctrlWrapper(updateWeight),
   addWater: ctrlWrapper(addWater),
   deleteWater: ctrlWrapper(deleteWater),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };
