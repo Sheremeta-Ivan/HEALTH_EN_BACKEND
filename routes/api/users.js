@@ -7,6 +7,7 @@ const {
   validateBody,
   updateAvatar,
 } = require("../../middlewares");
+
 const { schemas } = require("../../models/user");
 
 router.get("/current", authenticate, ctrl.getCurrent);

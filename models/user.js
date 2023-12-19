@@ -135,6 +135,8 @@ const validateGoal = Joi.object({
   goal: Joi.string().valid("lose fat", "maintain", "gain muscle").required(),
 });
 
+
+
 const schemas = {
   registerSchema,
   emailSchema,
