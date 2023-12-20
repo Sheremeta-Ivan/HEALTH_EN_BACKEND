@@ -1,8 +1,10 @@
 const { ctrlWrapper, HttpError, LocaleDate } = require("../helpers");
-const { User } = require("../models/user");
+
 const calculateDailyCalories = require("../calculations/calculateDailyCalories");
 const calculateDailyNutrition = require("../calculations/calculateDailyNutrition");
 const calculateDailyWater = require("../calculations/calculateDailyWater");
+
+const { User } = require("../models/user");
 const { Weight } = require("../models/weight");
 const { Water } = require("../models/water");
 
@@ -246,6 +248,8 @@ const deleteWater = async (req, res) => {
     res.status(200).json({ message: `All water intake for ${date} deleted` });
   }
 };
+
+
 
 module.exports = {
   getCurrent: ctrlWrapper(getCurrent),
