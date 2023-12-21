@@ -1,5 +1,6 @@
-const { ctrlWrapper, HttpError, LocaleDate } = require("../helpers");
+const bcrypt = require("bcrypt");
 
+const { ctrlWrapper, HttpError, LocaleDate } = require("../helpers");
 const calculateDailyCalories = require("../calculations/calculateDailyCalories");
 const calculateDailyNutrition = require("../calculations/calculateDailyNutrition");
 const calculateDailyWater = require("../calculations/calculateDailyWater");
@@ -29,7 +30,7 @@ const getCurrent = async (req, res) => {
 const updateInfo = async (req, res) => {
   const { _id: owner } = req.user;
   const user = await User.findById(owner);
-  const { weight } = req.body;
+  const { weight, newPassword } = req.body;
   let { date } = req.body;
 
   if (!date) {
@@ -72,6 +73,11 @@ const updateInfo = async (req, res) => {
     user.dailyCalories = dailyCaloriesCalc;
     user.dailyNutrition = dailyNutritionCalc;
     user.dailyWater = dailyWaterCalc;
+  }
+
+  if (newPassword) {
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
   }
 
   await user.save();

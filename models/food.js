@@ -1,73 +1,110 @@
 const { Schema, model } = require("mongoose");
 const { handleMongooseError } = require("../helpers");
 const LocaleDate = require("../helpers/LocaleDate");
-const Joi = require("joi");
+// const Joi = require("joi");
 
-const foodSchema = new Schema(
-  {
-    diary: {
-      type: String,
-      enum: ["Breakfast", "Lunch", "Dinner", "Snack"],
-      required: true,
-    },
-    name: {
-      type: String,
-      required: [true, "Meal name is required"],
-    },
-    carbohydrate: {
-      type: Number,
-      default: 0,
-      required: [true, "Carbohydrate is required"],
-    },
-    protein: {
-      type: Number,
-      default: 0,
-      required: [true, "Protein is required"],
-    },
-    fat: {
-      type: Number,
-      default: 0,
-      required: [true, "Fat is required"],
-    },
-    total: {
-      type: Number,
-      default: function () {
-        return this.fat + this.protein + this.carbohydrate;
+const oneDaySchema = new Schema({
+  products: [
+    {
+      productId: {
+        type: String,
+        ref: "product",
+        require: [true, "ID is required"],
       },
-      required: true,
+      name: {
+        type: String,
+        require: [true, "Name is required"],
+      },
+      calories: {
+        type: Number,
+        require: [true, "calories is required"],
+      },
+      fat: {
+        type: Number,
+        require: [true, "fat is required"],
+      },
+      carbonohidretes: {
+        type: Number,
+        require: [true, "carbonohidretes is required"],
+      },
+      protein: {
+        type: Number,
+        require: [true, "carbonohidretes is required"],
+      },
+      _id: false,
     },
+  ],
+  totalCalories: {
+    type: Number,
+    default: 0,
+  },
+  totalFat: {
+    type: Number,
+    default: 0,
+  },
+  totalCarbonohidretes: {
+    type: Number,
+    default: 0,
+  },
+  totalProtein: {
+    type: Number,
+    default: 0,
+  },
+});
+
+const userFoodIntakeSchema = new Schema(
+  {
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",
-      require: true,
+      required: true,
+      select: false,
     },
     date: {
       type: String,
-      require: true,
       default: () => LocaleDate(),
+      require: true,
+    },
+    totalCalories: {
+      type: Number,
+      default: 0,
+    },
+    totalFat: {
+      type: Number,
+      default: 0,
+    },
+    totalCarbonohidretes: {
+      type: Number,
+      default: 0,
+    },
+    totalProtein: {
+      type: Number,
+      default: 0,
+    },
+    breakfast: {
+      type: oneDaySchema,
+      default: null,
+      _id: false,
+    },
+    lunch: {
+      type: oneDaySchema,
+      default: null,
+      _id: false,
+    },
+    dinner: {
+      type: oneDaySchema,
+      default: null,
+      _id: false,
+    },
+    snack: {
+      type: oneDaySchema,
+      default: null,
+      _id: false,
     },
   },
-
-  { versionKey: false, timestamps: true }
+  { versionKey: false }
 );
 
-const joiFoodSchema = Joi.object({
-  diary: Joi.string().valid("Breakfast", "Lunch", "Dinner", "Snack"),
-  name: Joi.string().required(),
-  carbohydrate: Joi.number().required(),
-  protein: Joi.number().required(),
-  fat: Joi.number().required(),
-  total: Joi.number().required(),
-  owner: Joi.string().required(),
-  date: Joi.string().required(),
-});
+userFoodIntakeSchema.post("save", handleMongooseError);
 
-const schemas = {
-  joiFoodSchema,
-};
-
-foodSchema.post("save", handleMongooseError);
-
-const Food = model("food", foodSchema);
-
-module.exports = { Food, schemas };
+export const FoodIntake = model("food", userFoodIntakeSchema);
