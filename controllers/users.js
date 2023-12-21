@@ -15,10 +15,13 @@ const getCurrent = async (req, res) => {
 
   const userData = {
     name: user.name,
+    age: user.age,
+    height: user.height,
     email: user.email,
     gender: user.gender,
     weight: user.weight,
     goal: user.goal,
+    activity: user.activity,
     avatarURL: user.avatarURL,
     dailyCalories: user.dailyCalories,
     dailyNutrition: user.dailyNutrition,
@@ -254,8 +257,6 @@ const deleteWater = async (req, res) => {
     res.status(200).json({ message: `All water intake for ${date} deleted` });
   }
 };
-
-
 
 module.exports = {
   getCurrent: ctrlWrapper(getCurrent),

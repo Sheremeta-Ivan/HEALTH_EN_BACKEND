@@ -8,7 +8,6 @@ const oneDaySchema = new Schema({
     {
       productId: {
         type: String,
-        ref: "product",
         require: [true, "ID is required"],
       },
       name: {
@@ -34,6 +33,7 @@ const oneDaySchema = new Schema({
       _id: false,
     },
   ],
+  
   totalCalories: {
     type: Number,
     default: 0,
@@ -52,7 +52,7 @@ const oneDaySchema = new Schema({
   },
 });
 
-const userFoodIntakeSchema = new Schema(
+const FoodIntakeSchema = new Schema(
   {
     owner: {
       type: Schema.Types.ObjectId,
@@ -105,6 +105,6 @@ const userFoodIntakeSchema = new Schema(
   { versionKey: false }
 );
 
-userFoodIntakeSchema.post("save", handleMongooseError);
+FoodIntakeSchema.post("save", handleMongooseError);
 
-export const FoodIntake = model("food", userFoodIntakeSchema);
+export const FoodIntake = model("food", FoodIntakeSchema);
