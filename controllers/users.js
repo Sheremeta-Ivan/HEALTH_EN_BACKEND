@@ -1,6 +1,12 @@
 const bcrypt = require("bcrypt");
 
-const { ctrlWrapper, HttpError, LocaleDate } = require("../helpers");
+const {
+  ctrlWrapper,
+  HttpError,
+  LocaleDate,
+  updateTotals,
+} = require("../helpers");
+
 const calculateDailyCalories = require("../calculations/calculateDailyCalories");
 const calculateDailyNutrition = require("../calculations/calculateDailyNutrition");
 const calculateDailyWater = require("../calculations/calculateDailyWater");
@@ -8,6 +14,7 @@ const calculateDailyWater = require("../calculations/calculateDailyWater");
 const { User } = require("../models/user");
 const { Weight } = require("../models/weight");
 const { Water } = require("../models/water");
+const { Food } = require("../models/food");
 
 const getCurrent = async (req, res) => {
   const { _id } = req.user;
@@ -236,7 +243,7 @@ const addWater = async (req, res) => {
     if (!updatedWater) {
       throw HttpError(500, "Failed to update water");
     }
-    res.status(200).json(updatedWater);
+    res.status(200).json({ water: updatedWater.water });
   }
 };
 
@@ -258,6 +265,215 @@ const deleteWater = async (req, res) => {
   }
 };
 
+const addFood = async (req, res) => {
+  const { breakfast, lunch, dinner, snack } = req.body;
+  const { _id: owner } = req.user;
+
+  const formattedDate = LocaleDate();
+
+  let existingFood = await Food.findOne({
+    owner,
+    date: formattedDate,
+  }).exec();
+
+  if (existingFood) {
+    if (!existingFood.breakfast) {
+      existingFood.breakfast = { meals: [] };
+    }
+    if (!existingFood.lunch) {
+      existingFood.lunch = { meals: [] };
+    }
+    if (!existingFood.dinner) {
+      existingFood.dinner = { meals: [] };
+    }
+    if (!existingFood.snack) {
+      existingFood.snack = { meals: [] };
+    }
+
+    if (breakfast) {
+      existingFood.breakfast.meals.push(...breakfast.meals);
+    }
+    if (lunch) {
+      existingFood.lunch.meals.push(...lunch.meals);
+    }
+    if (dinner) {
+      existingFood.dinner.meals.push(...dinner.meals);
+    }
+    if (snack) {
+      existingFood.snack.meals.push(...snack.meals);
+    }
+
+    await existingFood.save();
+
+    await updateTotals(existingFood);
+
+    existingFood = await Food.findOne({
+      owner,
+      date: formattedDate,
+    }).exec();
+    res.status(200).json({
+      message: "Meals added to existing food intake",
+      data: existingFood,
+    });
+  } else {
+    const newFood = await Food.create({
+      owner,
+      date: formattedDate,
+      breakfast: breakfast || { meals: [] },
+      lunch: lunch || { meals: [] },
+      dinner: dinner || { meals: [] },
+      snack: snack || { meals: [] },
+    });
+
+    await newFood.save();
+    await updateTotals(newFood);
+
+    const createdFood = await Food.findOne({
+      owner,
+      date: formattedDate,
+    }).exec();
+
+    res
+      .status(201)
+      .json({ message: "New food intake created", data: createdFood });
+  }
+};
+
+const updateFood = async (req, res) => {
+  const { mealId } = req.params;
+  const { updatedMeal } = req.body;
+  const { _id: owner } = req.user;
+
+  if (!mealId) {
+    return res.status(400).json({
+      error: "No mealId specified for update",
+    });
+  }
+
+  const formattedDate = LocaleDate();
+
+  // Assuming the mealId can be part of any section (breakfast, lunch, dinner, snack)
+  const sections = ["breakfast", "lunch", "dinner", "snack"];
+
+  let targetType = null;
+  let updatedIntake = null;
+
+  // Iterate through each section to find and update the meal
+  for (const section of sections) {
+    const query = {
+      date: formattedDate,
+      owner,
+      [`${section}.meals.mealId`]: mealId,
+    };
+    const updateOperation = {
+      $set: {
+        [`${section}.meals.$`]: updatedMeal,
+      },
+    };
+
+    updatedIntake = await Food.findOneAndUpdate(query, updateOperation, {
+      new: true,
+    });
+
+    // If the meal was found and updated, set targetType and break out of the loop
+    if (updatedIntake) {
+      targetType = section;
+      await updateTotals(updatedIntake);
+      break;
+    }
+  }
+
+  if (!targetType) {
+    return res.status(404).json({
+      error: "Meal not found in any section",
+    });
+  }
+
+  return res.status(200).json({
+    message: `Meal updated in ${targetType}`,
+    data: updatedIntake,
+  });
+};
+
+const deleteFood = async (req, res) => {
+  const { mealId } = req.body;
+  const { _id: owner } = req.user;
+
+  if (!mealId) {
+    return res.status(400).json({
+      error: "No mealId specified for deletion",
+    });
+  }
+
+  const formattedDate = LocaleDate();
+
+  // Assuming the mealId can be part of any section (breakfast, lunch, dinner, snack)
+  const sections = ["breakfast", "lunch", "dinner", "snack"];
+
+  let targetType = null;
+  let updatedIntake = null;
+
+  // Iterate through each section to find and delete the meal
+  for (const section of sections) {
+    const query = { date: formattedDate, owner };
+    const updateOperation = {
+      $pull: {
+        [`${section}.meals`]: { mealId },
+      },
+    };
+
+    const existingFood = await Food.findOne(query).exec();
+
+    updatedIntake = await Food.findOneAndUpdate(query, updateOperation, {
+      new: true,
+    });
+
+    // If the meal was found and deleted, set targetType and break out of the loop
+    if (
+      updatedIntake &&
+      updatedIntake[section].meals.length < existingFood[section].meals.length
+    ) {
+      targetType = section;
+      await updateTotals(updatedIntake);
+      break;
+    }
+  }
+
+  if (!targetType) {
+    return res.status(404).json({
+      error: "Meal not found in any section",
+    });
+  }
+
+  return res.status(200).json({
+    message: `Meal deleted from ${targetType}`,
+    data: updatedIntake,
+  });
+};
+
+const getCurrentData = async (req, res) => {
+  const { _id: owner } = req.user;
+
+  const formattedDate = LocaleDate();
+
+  const existingFood = await Food.findOne({
+    owner,
+    date: formattedDate,
+  }).exec();
+
+  const existingWater = await Water.findOne({
+    owner,
+    date: formattedDate,
+  }).exec();
+
+  const data = {
+    food: existingFood,
+    water: existingWater.water,
+  };
+
+  res.status(200).json({ data });
+};
+
 module.exports = {
   getCurrent: ctrlWrapper(getCurrent),
   updateInfo: ctrlWrapper(updateInfo),
@@ -266,4 +482,8 @@ module.exports = {
   addWater: ctrlWrapper(addWater),
   deleteWater: ctrlWrapper(deleteWater),
   updateAvatar: ctrlWrapper(updateAvatar),
+  addFood: ctrlWrapper(addFood),
+  updateFood: ctrlWrapper(updateFood),
+  deleteFood: ctrlWrapper(deleteFood),
+  getCurrentData: ctrlWrapper(getCurrentData),
 };

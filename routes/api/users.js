@@ -30,8 +30,16 @@ router.put(
 
 router.put("/weight", authenticate, ctrl.updateWeight);
 
-router.post("/water", authenticate, ctrl.addWater);
+router.post("/water-intake", authenticate, ctrl.addWater);
 
-router.delete("/water", authenticate, ctrl.deleteWater);
+router.delete("/water-intake", authenticate, ctrl.deleteWater);
+
+router.post("/food-intake", authenticate, ctrl.addFood);
+
+router.put("/food-intake/:mealId", authenticate, ctrl.updateFood);
+
+router.delete("/food-intake", authenticate, ctrl.deleteFood);
+
+router.get("/current-data", authenticate, ctrl.getCurrentData);
 
 module.exports = router;

@@ -4,7 +4,7 @@ const handleMongooseError = require("./handleMongooseError");
 const adjustingAvatar = require("./adjustAvatar");
 const sendEmail = require("./sendEmail");
 const LocaleDate = require("./LocaleDate");
-
+const updateTotals = require("./updateTotals");
 
 module.exports = {
   HttpError,
@@ -13,4 +13,5 @@ module.exports = {
   adjustingAvatar,
   sendEmail,
   LocaleDate,
+  updateTotals,
 };

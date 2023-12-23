@@ -7,7 +7,6 @@ const waterSchema = new Schema(
   {
     date: {
       type: String,
-      //   require: true,
       default: () => LocaleDate(),
     },
     water: {

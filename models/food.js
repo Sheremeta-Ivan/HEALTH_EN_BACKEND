@@ -4,10 +4,11 @@ const LocaleDate = require("../helpers/LocaleDate");
 // const Joi = require("joi");
 
 const oneDaySchema = new Schema({
-  products: [
+  meals: [
     {
-      productId: {
+      mealId: {
         type: String,
+        ref: "meal",
         require: [true, "ID is required"],
       },
       name: {
@@ -33,19 +34,22 @@ const oneDaySchema = new Schema({
       _id: false,
     },
   ],
-  
+
   totalCalories: {
     type: Number,
     default: 0,
   },
+
   totalFat: {
     type: Number,
     default: 0,
   },
+
   totalCarbonohidretes: {
     type: Number,
     default: 0,
   },
+
   totalProtein: {
     type: Number,
     default: 0,
@@ -60,46 +64,55 @@ const FoodIntakeSchema = new Schema(
       required: true,
       select: false,
     },
+
     date: {
       type: String,
       default: () => LocaleDate(),
       require: true,
     },
+
     totalCalories: {
       type: Number,
       default: 0,
     },
+
     totalFat: {
       type: Number,
       default: 0,
     },
+
     totalCarbonohidretes: {
       type: Number,
       default: 0,
     },
+
     totalProtein: {
       type: Number,
       default: 0,
     },
+
     breakfast: {
       type: oneDaySchema,
       default: null,
-      _id: false,
+      _id: true,
     },
+
     lunch: {
       type: oneDaySchema,
       default: null,
-      _id: false,
+      _id: true,
     },
+
     dinner: {
       type: oneDaySchema,
       default: null,
-      _id: false,
+      _id: true,
     },
+
     snack: {
       type: oneDaySchema,
       default: null,
-      _id: false,
+      _id: true,
     },
   },
   { versionKey: false }
@@ -107,4 +120,8 @@ const FoodIntakeSchema = new Schema(
 
 FoodIntakeSchema.post("save", handleMongooseError);
 
-export const FoodIntake = model("food", FoodIntakeSchema);
+const Food = model("food", FoodIntakeSchema);
+
+module.exports = {
+  Food,
+};
