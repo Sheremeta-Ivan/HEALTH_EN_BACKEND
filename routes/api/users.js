@@ -38,7 +38,8 @@ router.post("/food-intake", authenticate, ctrl.addFood);
 
 router.put("/food-intake/:mealId", authenticate, ctrl.updateFood);
 
-router.delete("/food-intake", authenticate, ctrl.deleteFood);
+router.delete("/food-intake/:mealId", authenticate, ctrl.deleteFood);
+router.delete("/food-intake/:mealType", authenticate, ctrl.resetMeals);
 
 router.get("/current-data", authenticate, ctrl.getCurrentData);
 

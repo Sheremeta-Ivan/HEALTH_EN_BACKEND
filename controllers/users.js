@@ -396,7 +396,7 @@ const updateFood = async (req, res) => {
 };
 
 const deleteFood = async (req, res) => {
-  const { mealId } = req.body;
+  const { mealId } = req.params;
   const { _id: owner } = req.user;
 
   if (!mealId) {
@@ -451,6 +451,53 @@ const deleteFood = async (req, res) => {
   });
 };
 
+const resetMeals = async (req, res) => {
+  const { mealType } = req.params; // Access mealType directly from req.params
+  const { _id: owner } = req.user;
+
+  // Validate mealType
+  const validMealTypes = ["breakfast", "lunch", "dinner", "snack"];
+  if (!validMealTypes.includes(mealType)) {
+    return res.status(400).json({
+      error: "Invalid mealType specified",
+    });
+  }
+
+  const formattedDate = LocaleDate();
+
+  // Define the update operation to reset the meal intake
+  const resetOperation = {
+    $set: {
+      [`${mealType}.meals`]: [],
+      [`${mealType}.totalCalories`]: 0,
+      [`${mealType}.totalFat`]: 0,
+      [`${mealType}.totalCarbonohidretes`]: 0,
+      [`${mealType}.totalProtein`]: 0,
+    },
+  };
+
+  // Create the query to find the document to update
+  const query = { date: formattedDate, owner };
+
+  // Perform the update operation
+  const updatedIntake = await Food.findOneAndUpdate(query, resetOperation, {
+    new: true,
+  });
+
+  if (!updatedIntake) {
+    return res.status(404).json({
+      error: "Food intake not found for the specified date",
+    });
+  }
+
+  await updateTotals(updatedIntake);
+
+  return res.status(200).json({
+    message: `${mealType} intake reset to default values`,
+    data: updatedIntake,
+  });
+};
+
 const getCurrentData = async (req, res) => {
   const { _id: owner } = req.user;
 
@@ -486,4 +533,5 @@ module.exports = {
   updateFood: ctrlWrapper(updateFood),
   deleteFood: ctrlWrapper(deleteFood),
   getCurrentData: ctrlWrapper(getCurrentData),
+  resetMeals: ctrlWrapper(resetMeals),
 };
