@@ -43,4 +43,6 @@ router.delete("/food-intake/:mealType", authenticate, ctrl.resetMeals);
 
 router.get("/current-data", authenticate, ctrl.getCurrentData);
 
+router.get("/statistics/:month", authenticate, ctrl.getStatistics);
+
 module.exports = router;

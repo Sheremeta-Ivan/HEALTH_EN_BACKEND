@@ -521,6 +521,204 @@ const getCurrentData = async (req, res) => {
   res.status(200).json({ data });
 };
 
+const getStatistics = async (req, res) => {
+  try {
+    const { month } = req.params;
+    const { _id: owner } = req.user;
+
+    // Mapping of month names to numeric values
+    const monthNameToNumber = {
+      January: 1,
+      February: 2,
+      March: 3,
+      April: 4,
+      May: 5,
+      June: 6,
+      July: 7,
+      August: 8,
+      September: 9,
+      October: 10,
+      November: 11,
+      December: 12,
+    };
+
+    // Convert the month name to a numeric value
+    const monthNumber = monthNameToNumber[month];
+
+    if (!monthNumber) {
+      return res.status(400).json({
+        error: `Invalid month specified`,
+      });
+    }
+
+    const monthStr = String(monthNumber).padStart(2, "0");
+
+    console.log("Converted month:", monthStr);
+
+    // ------------ Total Water -------------- //
+    const userWaterIntakes = await Water.aggregate([
+      {
+        $match: {
+          date: { $regex: `^\\d{2}.${monthStr}.\\d{4}$` },
+          owner,
+        },
+      },
+      {
+        $group: {
+          _id: "$owner",
+          totalWater: {
+            $push: {
+              date: "$date",
+              water: "$water",
+            },
+          },
+        },
+      },
+    ]);
+
+    let totalWater = [];
+
+    if (userWaterIntakes.length > 0) {
+      totalWater = userWaterIntakes[0].totalWater;
+    }
+
+    // ------------ Total Weight -------------- //
+    const userWeightEntries = await Weight.aggregate([
+      {
+        $match: {
+          date: { $regex: `^\\d{2}.${monthStr}.\\d{4}$` },
+          owner,
+        },
+      },
+      {
+        $group: {
+          _id: "$owner",
+          totalWeight: {
+            $push: {
+              date: "$date",
+              weight: "$weight",
+            },
+          },
+        },
+      },
+    ]);
+
+    let totalWeight = [];
+
+    if (userWeightEntries.length > 0) {
+      totalWeight = userWeightEntries[0].totalWeight;
+    }
+
+    // ------------ Total Calories -------------- //
+    const userFoodIntakes = await Food.aggregate([
+      {
+        $match: {
+          date: { $regex: `^\\d{2}.${monthStr}.\\d{4}$` },
+          owner,
+        },
+      },
+      {
+        $group: {
+          _id: "$owner",
+          totalCalories: {
+            $push: {
+              date: "$date",
+              calories: "$totalCalories",
+            },
+          },
+        },
+      },
+    ]);
+
+    let totalCalories = [];
+
+    if (userFoodIntakes.length > 0) {
+      totalCalories = userFoodIntakes[0].totalCalories;
+    }
+
+    // Get the total number of days in the specified month
+    const totalDaysInMonth = new Date(
+      new Date().getFullYear(),
+      monthStr,
+      0
+    ).getDate();
+
+    // Generate an array of all days in the month
+    const daysInMonth = Array.from(
+      { length: totalDaysInMonth },
+      (_, index) => index + 1
+    );
+
+    // Fill in missing days with water value of 0
+    totalWater = daysInMonth.map((day) => {
+      const existingWaterData = totalWater.find(
+        (data) => parseInt(data.date.split(".")[0]) === day
+      );
+      return (
+        existingWaterData || {
+          date: day,
+          water: 0,
+        }
+      );
+    });
+
+    // Convert the date to a number
+    totalWater = totalWater.map((entry) => ({
+      date: parseInt(entry.date),
+      water: entry.water,
+    }));
+
+    // Fill in missing days with weight value of 0
+    totalWeight = daysInMonth.map((day) => {
+      const existingWeightData = totalWeight.find(
+        (data) => parseInt(data.date.split(".")[0]) === day
+      );
+      return (
+        existingWeightData || {
+          date: day,
+          weight: 0,
+        }
+      );
+    });
+
+    // Convert the date to a number
+    totalWeight = totalWeight.map((entry) => ({
+      date: parseInt(entry.date),
+      weight: entry.weight,
+    }));
+
+    // Fill in missing days with calories value of 0
+    totalCalories = daysInMonth.map((day) => {
+      const existingCaloriesData = totalCalories.find(
+        (data) => parseInt(data.date.split(".")[0]) === day
+      );
+      return (
+        existingCaloriesData || {
+          date: day,
+          calories: 0,
+        }
+      );
+    });
+
+    // Convert the date to a number
+    totalCalories = totalCalories.map((entry) => ({
+      date: parseInt(entry.date),
+      calories: entry.calories,
+    }));
+
+    return res.status(200).json({
+      data: {
+        water: totalWater,
+        weight: totalWeight,
+        calories: totalCalories,
+      },
+    });
+  } catch (error) {
+    console.error("Error in getStatistics:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   getCurrent: ctrlWrapper(getCurrent),
   updateInfo: ctrlWrapper(updateInfo),
@@ -534,4 +732,5 @@ module.exports = {
   deleteFood: ctrlWrapper(deleteFood),
   getCurrentData: ctrlWrapper(getCurrentData),
   resetMeals: ctrlWrapper(resetMeals),
+  getStatistics: ctrlWrapper(getStatistics),
 };
