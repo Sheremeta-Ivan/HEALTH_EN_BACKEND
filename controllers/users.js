@@ -212,7 +212,7 @@ const updateWeight = async (req, res) => {
     user.dailyWater = dailyWaterCalc;
 
     await user.save();
-    res.status(200).json(updatedWeight);
+    return res.status(200).json({ data: user });
   } else {
     res.status(200).json({ message: "Weight unchanged for specified date" });
   }
