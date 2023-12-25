@@ -139,7 +139,6 @@ const updateFood = async (req, res) => {
   });
 };
 
-
 const deleteFood = async (req, res) => {
   const { mealId } = req.params;
   const { _id: owner } = req.user;
