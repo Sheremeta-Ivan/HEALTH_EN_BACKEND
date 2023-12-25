@@ -172,7 +172,7 @@ const joiFoodSchema = Joi.object({
 
 const joiUpdateFoodSchema = Joi.object({
   name: Joi.string(),
-  calories: Joi.number().min(0),
+  calories: Joi.number(),
   fat: Joi.number().min(0),
   carbohydrates: Joi.number().min(0),
   protein: Joi.number().min(0),

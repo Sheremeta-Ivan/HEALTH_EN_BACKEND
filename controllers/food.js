@@ -79,7 +79,16 @@ const addFood = async (req, res) => {
 
 const updateFood = async (req, res) => {
   const { mealId } = req.params;
-  const { updatedMeal } = req.body;
+
+  const updatedMeal = {
+    mealId, 
+    name: req.body.name,
+    calories: req.body.calories,
+    fat: req.body.fat,
+    carbohydrates: req.body.carbohydrates,
+    protein: req.body.protein,
+  };
+
   const { _id: owner } = req.user;
 
   if (!mealId) {
@@ -111,9 +120,6 @@ const updateFood = async (req, res) => {
       new: true,
     });
 
-    console.log("Query:", query);
-    console.log("Update Operation:", updateOperation);
-
     if (updatedIntake) {
       targetType = section;
       await updateTotals(updatedIntake);
@@ -132,6 +138,7 @@ const updateFood = async (req, res) => {
     data: updatedIntake,
   });
 };
+
 
 const deleteFood = async (req, res) => {
   const { mealId } = req.params;

@@ -14,12 +14,12 @@ router.post(
   ctrl.addFood
 );
 
-// router.put(
-//   "/food-intake/:mealId",
-//   validateBody(schemas.joiUpdateFoodSchema),
-//   authenticate,
-//   ctrl.updateFood
-// );
+router.put(
+  "/food-intake/:mealId",
+  validateBody(schemas.joiUpdateFoodSchema),
+  authenticate,
+  ctrl.updateFood
+);
 
 router.delete("/reset-meals/:mealType", authenticate, ctrl.resetMeals);
 router.delete("/food-intake/:mealId", authenticate, ctrl.deleteFood);
