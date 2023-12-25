@@ -132,7 +132,7 @@
                                     "token": {
                                         "type": "string",
                                         "description": "Authentication token for the Signned-in user",
-                                        "example": ""
+                                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpFjOGJiO"
                                     }
                                 },
                                 "required": [
@@ -669,6 +669,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "$ref": "#/components/schemas/Food-intakeRespons",
                                     "type": "object",
                                     "properties": {
                                         "status": {
@@ -1033,7 +1034,7 @@
                     "token": {
                         "type": "string",
                         "description": "Authentication token for the logged-in user",
-                        "example": "*"
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6Ikp"
                     },
                     "user": {
                         "type": "object",
@@ -1102,7 +1103,7 @@
                         "properties": {
                             "email": {
                                 "type": "string",
-                                "description": "User's email"
+                                "description": "User email"
                             },
                             "name": {
                                 "type": "string",
@@ -1189,21 +1190,64 @@
                     }
                 }
             },
-            "water-intakerRequest": {
+            "water-intakeRequest": {
                 "type": "object",
                 "properties": {
-                    "amount": {
+                    "water": {
                         "type": "number",
                         "description": "Amount of water consumed"
                     }
                 }
             },
-            "securitySchemes": {
-                "Bearer": {
-                    "type": "http",
-                    "scheme": "bearer",
-                    "bearerFormat": "JWT"
-                }
+            "Food-intakeRespons": {
+                "type": "object",
+                "properties": {
+                    "mealId": {
+                        "type": "string",
+                        "example": "Meal ID",
+                        "description": "Meal ID"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Chicken Salad",
+                        "description": "Name of the food"
+                    },
+                    "calories": {
+                        "type": "number",
+                        "example": 350.5,
+                        "description": "Calories content"
+                    },
+                    "fat": {
+                        "type": "number",
+                        "example": 15.2,
+                        "description": "Fat content"
+                    },
+                    "carbohydrates": {
+                        "type": "number",
+                        "example": 20.5,
+                        "description": "Carbohydrates content"
+                    },
+                    "protein": {
+                        "type": "number",
+                        "example": 25.0,
+                        "description": "Protein content"
+                    }
+                },
+                "required": [
+                    "mealId",
+                    "name",
+                    "calories",
+                    "fat",
+                    "carbohydrates",
+                    "protein"
+                ]
+            }
+        },
+        "securitySchemes": {
+            "Bearer": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
             }
         }
     }
