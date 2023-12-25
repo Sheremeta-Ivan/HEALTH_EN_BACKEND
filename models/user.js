@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+
 const Joi = require("joi");
 const { handleMongooseError } = require("../helpers");
 const LocaleDate = require("../helpers/LocaleDate");
@@ -118,10 +119,6 @@ const registerSchema = Joi.object({
   token: Joi.string(),
 });
 
-const emailSchema = Joi.object({
-  email: Joi.string().pattern(emailRegex).required(),
-});
-
 const loginSchema = Joi.object({
   email: Joi.string().pattern(emailRegex).required(),
   password: Joi.string().min(8).required(),
@@ -135,14 +132,21 @@ const validateGoal = Joi.object({
   goal: Joi.string().valid("lose fat", "maintain", "gain muscle").required(),
 });
 
-
+const validateUpdateInfo = Joi.object({
+  newPassword: Joi.string().min(8).optional(),
+  age: Joi.number().min(8).max(120).optional(),
+  gender: Joi.string().valid("male", "female").optional(),
+  weight: Joi.number().min(4).max(300).optional(),
+  height: Joi.number().min(120).max(220).optional(),
+  activity: Joi.number().valid(1.2, 1.375, 1.55, 1.725, 1.9).optional(),
+});
 
 const schemas = {
   registerSchema,
-  emailSchema,
   loginSchema,
   userResetPasswordSchema,
   validateGoal,
+  validateUpdateInfo,
 };
 
 const User = model("user", userSchema);

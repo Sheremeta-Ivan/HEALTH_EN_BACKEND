@@ -3,6 +3,7 @@ const router = express.Router();
 
 const ctrl = require("../../controllers/auth");
 const { validateBody, authenticate } = require("../../middlewares");
+
 const { schemas } = require("../../models/user");
 
 router.post("/signup", validateBody(schemas.registerSchema), ctrl.register);

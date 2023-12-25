@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+
 const { handleMongooseError } = require("../helpers");
 const LocaleDate = require("../helpers/LocaleDate");
 const Joi = require("joi");
@@ -33,10 +34,11 @@ waterSchema.post("save", handleMongooseError);
 const joiWaterSchema = Joi.object({
   date: Joi.string(),
   water: Joi.number().min(0).max(10000).required(),
-  owner: Joi.string().required(),
+  owner: Joi.string(),
 });
 
 const Water = model("water", waterSchema);
+
 const schemas = {
   joiWaterSchema,
 };

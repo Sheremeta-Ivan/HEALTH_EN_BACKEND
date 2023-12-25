@@ -30,7 +30,7 @@ const weightSchema = new Schema(
 const joiWeightSchema = Joi.object({
   date: Joi.string(),
   weight: Joi.number().min(4).max(300).required(),
-  owner: Joi.string().required(),
+  owner: Joi.string(),
 });
 
 const schemas = { joiWeightSchema };

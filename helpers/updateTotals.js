@@ -13,33 +13,33 @@ const updateTotals = async (intake) => {
       (acc, curr) => {
         acc.totalCalories += curr.calories || 0;
         acc.totalFat += curr.fat || 0;
-        acc.totalCarbonohidretes += curr.carbonohidretes || 0;
+        acc.totalCarbohydrates += curr.carbohydrates || 0;
         acc.totalProtein += curr.protein || 0;
         return acc;
       },
       {
         totalCalories: 0,
         totalFat: 0,
-        totalCarbonohidretes: 0,
+        totalCarbohydrates: 0,
         totalProtein: 0,
       }
     );
 
     intake[type].totalCalories = total.totalCalories;
     intake[type].totalFat = total.totalFat;
-    intake[type].totalCarbonohidretes = total.totalCarbonohidretes;
+    intake[type].totalCarbohydrates = total.totalCarbohydrates;
     intake[type].totalProtein = total.totalProtein;
 
     totalAllCalories += total.totalCalories;
     totalAllFat += total.totalFat;
     totalAllProtein += total.totalProtein;
-    totalAllCarbs += total.totalCarbonohidretes;
+    totalAllCarbs += total.totalCarbohydrates;
   }
 
   intake.totalCalories = totalAllCalories;
   intake.totalFat = totalAllFat;
   intake.totalProtein = totalAllProtein;
-  intake.totalCarbonohidretes = totalAllCarbs;
+  intake.totalCarbohydrates = totalAllCarbs;
 
   await intake.save();
 };

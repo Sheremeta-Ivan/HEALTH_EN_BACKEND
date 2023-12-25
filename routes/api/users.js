@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const ctrl = require("../../controllers/users");
+
 const {
   authenticate,
   validateBody,
@@ -12,7 +13,12 @@ const { schemas } = require("../../models/user");
 
 router.get("/current", authenticate, ctrl.getCurrent);
 
-router.put("/update", authenticate, ctrl.updateInfo);
+router.put(
+  "/update",
+  authenticate,
+  validateBody(schemas.validateUpdateInfo),
+  ctrl.updateInfo
+);
 
 router.put(
   "/update-avatar",
@@ -27,22 +33,5 @@ router.put(
   validateBody(schemas.validateGoal),
   ctrl.updateGoal
 );
-
-router.put("/weight", authenticate, ctrl.updateWeight);
-
-router.post("/water-intake", authenticate, ctrl.addWater);
-
-router.delete("/water-intake", authenticate, ctrl.deleteWater);
-
-router.post("/food-intake", authenticate, ctrl.addFood);
-
-router.put("/food-intake/:mealId", authenticate, ctrl.updateFood);
-
-router.delete("/food-intake/:mealId", authenticate, ctrl.deleteFood);
-router.delete("/food-intake/:mealType", authenticate, ctrl.resetMeals);
-
-router.get("/current-data", authenticate, ctrl.getCurrentData);
-
-router.get("/statistics/:month", authenticate, ctrl.getStatistics);
 
 module.exports = router;
