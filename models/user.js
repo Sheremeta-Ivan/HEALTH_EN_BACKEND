@@ -133,6 +133,8 @@ const validateGoal = Joi.object({
 });
 
 const validateUpdateInfo = Joi.object({
+  name: Joi.string().min(2).max(30).optional(),
+  email: Joi.string().pattern(emailRegex).optional(),
   newPassword: Joi.string().min(8).optional(),
   age: Joi.number().min(8).max(120).optional(),
   gender: Joi.string().valid("male", "female").optional(),
