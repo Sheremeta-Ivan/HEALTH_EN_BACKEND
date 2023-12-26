@@ -16,8 +16,8 @@ router.post(
 
 router.put(
   "/food-intake/:mealId",
-  validateBody(schemas.joiUpdateFoodSchema),
   authenticate,
+  validateBody(schemas.joiUpdateFoodSchema),
   ctrl.updateFood
 );
 

@@ -1,10 +1,6 @@
 const bcrypt = require("bcrypt");
 
-const {
-  ctrlWrapper,
-  HttpError,
-  LocaleDate,
-} = require("../helpers");
+const { ctrlWrapper, HttpError, LocaleDate } = require("../helpers");
 
 const calculateDailyCalories = require("../calculations/calculateDailyCalories");
 const calculateDailyNutrition = require("../calculations/calculateDailyNutrition");
@@ -13,26 +9,13 @@ const calculateDailyWater = require("../calculations/calculateDailyWater");
 const { User } = require("../models/user");
 const { Weight } = require("../models/weight");
 
-
 const getCurrent = async (req, res) => {
   const { _id } = req.user;
   const user = await User.findById(_id);
-
-  const userData = {
-    name: user.name,
-    age: user.age,
-    height: user.height,
-    email: user.email,
-    gender: user.gender,
-    weight: user.weight,
-    goal: user.goal,
-    activity: user.activity,
-    avatarURL: user.avatarURL,
-    dailyCalories: user.dailyCalories,
-    dailyNutrition: user.dailyNutrition,
-    dailyWater: user.dailyWater,
-  };
-  res.status(200).json({ data: userData });
+  if (!user) {
+    throw HttpError(404, "User not found");
+  }
+  res.status(200).json({ data: user });
 };
 
 const updateInfo = async (req, res) => {
@@ -152,8 +135,6 @@ const updateGoal = async (req, res) => {
 
   return res.status(200).json({ data: user });
 };
-
-
 
 module.exports = {
   getCurrent: ctrlWrapper(getCurrent),

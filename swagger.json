@@ -1,1303 +1,1236 @@
 {
-    "openapi": "3.0.1",
-    "info": {
-        "version": "2.0.2",
-        "title": "API HealthHub",
-        "description": "Backend for our HealthHub",
-        "license": {
-            "name": "HealthHub by project-group-3",
-            "url": "songlad.github.io/HEALTH_EN/"
-        }
+  "openapi": "3.0.1",
+  "info": {
+    "version": "2.0.2",
+    "title": "API HealthHub",
+    "description": "Backend for our HealthHub",
+    "license": {
+      "name": "HealthHub by project-group-3",
+      "url": "songlad.github.io/HEALTH_EN/"
+    }
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "servers": [
+    {
+      "url": "https://healthy-hub-backend-fs5j.onrender.com/"
     },
-    "consumes": [
-        "application/json"
-    ],
-    "produces": [
-        "application/json"
-    ],
-    "servers": [
-        {
-            "url": "https://healthy-hub-backend-fs5j.onrender.com/"
-        },
-        {
-            "url": "http://localhost:3000"
-        }
-    ],
-    "tags": [
-        {
-            "name": "Auth",
-            "description": "Authorization endpoints"
-        },
-        {
-            "name": "User",
-            "description": "User endpoints"
-        },
-        {
-            "name": "recommended Foods",
-            "description": "Recommended Foods endpoints"
-        }
-    ],
-    "paths": {
-        "/api/auth/signup": {
-            "post": {
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "User registration",
-                "security": [],
-                "requestBody": {
-                    "description": "Registration object",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/signupRequest"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Successful registration",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/signupRespons"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request (invalid request body)"
-                    },
-                    "409": {
-                        "description": "Email already in use"
-                    }
-                }
-            }
-        },
-        "/api/auth/signin": {
-            "post": {
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "User signin",
-                "parameters": [],
-                "requestBody": {
-                    "description": "signin object",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/SigninRequest",
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Successful login",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/SigninResponse",
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized request",
-                        "content": {}
-                    }
-                }
-            }
-        },
-        "/api/auth/signout": {
-            "post": {
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "User Signout",
-                "parameters": [],
-                "requestBody": {
-                    "description": "Signout ",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "token": {
-                                        "type": "string",
-                                        "description": "Authentication token for the Signned-in user",
-                                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpFjOGJiO"
-                                    }
-                                },
-                                "required": [
-                                    "token"
-                                ]
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Logout success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Logout successful"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized request (invalid token)",
-                        "content": {}
-                    }
-                }
-            }
-        },
-        "/api/auth/forgotPassword": {
-            "post": {
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "Forgot Password",
-                "parameters": [],
-                "requestBody": {
-                    "description": "Forgot Password object",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ForgotPasswordRequest",
-                                "type": "object",
-                                "properties": {
-                                    "email": {
-                                        "type": "string",
-                                        "format": "email",
-                                        "description": "User email",
-                                        "example": "qwerty123@gmail.com"
-                                    }
-                                },
-                                "required": [
-                                    "email"
-                                ]
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Email sent successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Check your email"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request (invalid request body)",
-                        "content": {}
-                    },
-                    "401": {
-                        "description": "Email not found",
-                        "content": {}
-                    }
-                }
-            }
-        },
-        "/api/user/current": {
-            "get": {
-                "tags": [
-                    "User"
-                ],
-                "summary": "Get current user",
-                "responses": {
-                    "200": {
-                        "description": "Successful retrieval of the current user",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/CurrentUserResponse"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized request",
-                        "content": {}
-                    }
-                }
-            }
-        },
-        "/api/user/update": {
-            "put": {
-                "tags": [
-                    "User"
-                ],
-                "summary": "Update user information",
-                "parameters": [
-                    {
-                        "name": "token",
-                        "in": "header",
-                        "description": "Authentication token",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "description": "Updated user information object",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/UserUpdateRequest"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful update of user information"
-                    },
-                    "400": {
-                        "description": "Bad request (invalid request body)"
-                    },
-                    "404": {
-                        "description": "User not found"
-                    }
-                }
-            }
-        },
-        "/api/user/update-avatar": {
-            "put": {
-                "tags": [
-                    "User"
-                ],
-                "summary": "Update user avatar",
-                "parameters": [
-                    {
-                        "name": "token",
-                        "in": "header",
-                        "description": "Authentication token",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "description": "Updated user avatar object",
-                    "required": true,
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "$ref": "#/components/schemas/UserAvatarUpdateRequest"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful update of user avatar"
-                    },
-                    "400": {
-                        "description": "Bad request (invalid request body)"
-                    },
-                    "401": {
-                        "description": "Unauthorized request"
-                    }
-                }
-            }
-        },
-        "/api/user/goal": {
-            "put": {
-                "tags": [
-                    "User"
-                ],
-                "summary": "Get user goal",
-                "parameters": [
-                    {
-                        "name": "token",
-                        "in": "header",
-                        "description": "Authentication token",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful retrieval of user goal",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "goal": {
-                                            "type": "string",
-                                            "example": "lose fat"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "User not found"
-                    }
-                }
-            }
-        },
-        "/api/user/weight": {
-            "put": {
-                "tags": [
-                    "User"
-                ],
-                "summary": "Update user weight",
-                "parameters": [
-                    {
-                        "name": "token",
-                        "in": "header",
-                        "description": "Authentication token",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "description": "Updated user weight object",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/UserWeightUpdateRequest"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Weight unchanged for specified date"
-                    },
-                    "400": {
-                        "description": "Bad request (invalid request body)"
-                    },
-                    "404": {
-                        "description": "That user does not exists"
-                    }
-                }
-            }
-        },
-        "/api/user/water-intake": {
-            "post": {
-                "tags": [
-                    "User"
-                ],
-                "summary": "Add water consumption",
-                "parameters": [
-                    {
-                        "name": "token",
-                        "in": "header",
-                        "description": "Authentication token",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "description": "Water consumption object",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/water-intakeRequest"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful update of water"
-                    },
-                    "400": {
-                        "description": "Bad request (invalid request body)"
-                    },
-                    "500": {
-                        "description": "Failed to update water"
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "User"
-                ],
-                "summary": "Delete water consumption",
-                "parameters": [
-                    {
-                        "name": "token",
-                        "in": "header",
-                        "description": "Authentication token",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "All water intake for ${date} deleted"
-                    },
-                    "400": {
-                        "description": "Bad request (invalid request parameters)"
-                    },
-                    "401": {
-                        "description": "Unauthorized request"
-                    }
-                }
-            }
-        },
-        "/api/user/food-intake": {
-            "post": {
-                "tags": [
-                    "User"
-                ],
-                "summary": "Add food intake",
-                "requestBody": {
-                    "description": "Food intake object",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "breakfast": {
-                                        "type": "object",
-                                        "properties": {
-                                            "meals": {
-                                                "type": "array",
-                                                "items": {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "mealId": {
-                                                            "type": "string",
-                                                            "example": "1"
-                                                        },
-                                                        "name": {
-                                                            "type": "string",
-                                                            "example": "Eggs"
-                                                        },
-                                                        "calories": {
-                                                            "type": "number",
-                                                            "example": "70"
-                                                        },
-                                                        "fat": {
-                                                            "type": "number",
-                                                            "example": "5"
-                                                        },
-                                                        "carbohydrates": {
-                                                            "type": "number",
-                                                            "example": "1"
-                                                        },
-                                                        "protein": {
-                                                            "type": "number",
-                                                            "example": "6"
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    },
-                                    "lunch": {
-                                        "type": "object",
-                                        "properties": {
-                                            "meals": {
-                                                "type": "array",
-                                                "items": {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "mealId": {
-                                                            "type": "string",
-                                                            "example": "2"
-                                                        },
-                                                        "name": {
-                                                            "type": "string",
-                                                            "example": "Chicken Salad"
-                                                        },
-                                                        "calories": {
-                                                            "type": "number",
-                                                            "example": "200"
-                                                        },
-                                                        "fat": {
-                                                            "type": "number",
-                                                            "example": "8"
-                                                        },
-                                                        "carbohydrates": {
-                                                            "type": "number",
-                                                            "example": "10"
-                                                        },
-                                                        "protein": {
-                                                            "type": "number",
-                                                            "example": "20"
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    },
-                                    "dinner": {
-                                        "type": "object",
-                                        "properties": {
-                                            "meals": {
-                                                "type": "array",
-                                                "items": {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "mealId": {
-                                                            "type": "string",
-                                                            "example": "3"
-                                                        },
-                                                        "name": {
-                                                            "type": "string",
-                                                            "example": "Grilled Salmon"
-                                                        },
-                                                        "calories": {
-                                                            "type": "number",
-                                                            "example": "200"
-                                                        },
-                                                        "fat": {
-                                                            "type": "number",
-                                                            "example": "8"
-                                                        },
-                                                        "carbohydrates": {
-                                                            "type": "number",
-                                                            "example": "5"
-                                                        },
-                                                        "protein": {
-                                                            "type": "number",
-                                                            "example": "20"
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    },
-                                    "snack": {
-                                        "type": "object",
-                                        "properties": {
-                                            "meals": {
-                                                "type": "array",
-                                                "items": {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "mealId": {
-                                                            "type": "string",
-                                                            "example": "4"
-                                                        },
-                                                        "name": {
-                                                            "type": "string",
-                                                            "example": "Apple"
-                                                        },
-                                                        "calories": {
-                                                            "type": "number",
-                                                            "example": "50"
-                                                        },
-                                                        "fat": {
-                                                            "type": "number",
-                                                            "example": "0"
-                                                        },
-                                                        "carbohydrates": {
-                                                            "type": "number",
-                                                            "example": "14"
-                                                        },
-                                                        "protein": {
-                                                            "type": "number",
-                                                            "example": "0.5"
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful food intake addition",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Food-intakeRespons",
-                                    "type": "object",
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Meals added to existing food intake"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/user/food-intake/{mealId}": {
-            "put": {
-                "tags": [
-                    "User"
-                ],
-                "summary": "Update food intake",
-                "parameters": [
-                    {
-                        "name": "mealId",
-                        "in": "path",
-                        "required": true,
-                        "description": "ID of the meal to update",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "description": "Updated meal information",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "name": {
-                                        "type": "string",
-                                        "example": "Eggs"
-                                    },
-                                    "calories": {
-                                        "type": "number",
-                                        "example": "345"
-                                    },
-                                    "fat": {
-                                        "type": "number",
-                                        "example": "123"
-                                    },
-                                    "carbohydrates": {
-                                        "type": "number",
-                                        "example": "45"
-                                    },
-                                    "protein": {
-                                        "type": "number",
-                                        "example": "24"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful update of food intake",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "code": {
-                                            "type": "number",
-                                            "example": 200
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Meal updated in ${targetType}"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "delete": {
-            "tags": [
-                "User"
-            ],
-            "summary": "Delete food intake by mealId",
-            "parameters": [
-                {
-                    "name": "mealId",
-                    "in": "path",
-                    "description": "ID of the meal",
-                    "required": true,
-                    "schema": {
-                        "type": "integer"
-                    }
-                }
-            ],
-            "responses": {
-                "200": {
-                    "description": "Meal deleted from ${targetType}"
-                },
-                "401": {
-                    "description": "Unauthorized request"
-                },
-                "404": {
-                    "description": "Meal not found in any section"
-                }
-            }
-        },
-        "/api/user/reset-meals/{mealType}": {
-            "delete": {
-                "tags": [
-                    "User"
-                ],
-                "summary": "Delete food intake by mealType",
-                "parameters": [
-                    {
-                        "name": "mealType",
-                        "in": "path",
-                        "description": "Type of the meal (e.g., breakfast, lunch, dinner)",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "${mealType} intake reset to default values"
-                    },
-                    "401": {
-                        "description": "Unauthorized request"
-                    },
-                    "404": {
-                        "description": "Food intake not found for the specified date"
-                    }
-                }
-            }
-        },
-        "/api/user/current-data": {
-            "get": {
-                "tags": [
-                    "User"
-                ],
-                "summary": "Get current user data",
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful retrieval of current user data",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/CurrentUserResponse"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized request"
-                    }
-                }
-            }
-        },
-        "/api/user/statistics/{month}": {
-            "get": {
-                "tags": [
-                    "User"
-                ],
-                "parameters": [
-                    {
-                        "name": "month",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description": "Month in string format ('December')"
-                    }
-                ],
-                "get": {
-                    "summary": "Get user statistics for a specific month",
-                    "security": [
-                        {
-                            "token": []
-                        }
-                    ]
-                }
-            }
-        },
-        "/api/recommended-food": {
-            "get": {
-                "tags": [
-                    "recommendedFoods"
-                ],
-                "summary": "Get recommended foods",
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful request. Returns recommended foods.",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "foods": [
-                                        {
-                                            "name": "Kale",
-                                            "calories": 49,
-                                            "protein": 0.67,
-                                            "carbohydrates": 7.68,
-                                            "fat": 0.3
-                                        },
-                                        {
-                                            "name": "Strawberries",
-                                            "calories": 32,
-                                            "protein": 31,
-                                            "carbohydrates": 0,
-                                            "fat": 3.6
-                                        }
-                                    ]
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not found"
-                    }
-                }
-            }
-        }
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
     },
-    "components": {
-        "schemas": {
-            "signupRequest": {
-                "type": "object",
-                "properties": {
-                    "email": {
-                        "type": "string",
-                        "format": "email",
-                        "description": "User email",
-                        "example": "qwerty123@gmail.com"
-                    },
-                    "password": {
-                        "type": "string",
-                        "description": "User password",
-                        "example": "qwerty12345"
-                    },
-                    "name": {
-                        "type": "string",
-                        "description": "User name",
-                        "example": "Ivan"
-                    },
-                    "goal": {
-                        "type": "string",
-                        "description": "User goal",
-                        "example": "lose fat",
-                        "enum": [
-                            "lose fat",
-                            "maintain",
-                            "gain muscle"
-                        ]
-                    },
-                    "age": {
-                        "type": "number",
-                        "description": "User age",
-                        "example": 18
-                    },
-                    "weight": {
-                        "type": "number",
-                        "description": "User weight",
-                        "example": 80
-                    },
-                    "height": {
-                        "type": "number",
-                        "description": "User height",
-                        "example": 183
-                    },
-                    "gender": {
-                        "type": "string",
-                        "example": "male",
-                        "enum": [
-                            "male",
-                            "female"
-                        ]
-                    },
-                    "activity": {
-                        "type": "number",
-                        "example": 1.2,
-                        "enum": [
-                            1.2,
-                            1.375,
-                            1.55,
-                            1.725,
-                            1.9
-                        ]
-                    }
-                },
-                "required": [
-                    "email",
-                    "password",
-                    "name",
-                    "goal",
-                    "age"
-                ]
-            },
-            "signupRespons": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string",
-                        "description": "User name",
-                        "example": "Ivan"
-                    },
-                    "weight": {
-                        "type": "number",
-                        "description": "User weight",
-                        "example": 80
-                    },
-                    "goal": {
-                        "type": "string",
-                        "description": "User goal",
-                        "example": "lose Fat",
-                        "enum": [
-                            "lose Fat",
-                            "maintain",
-                            "gain muscle"
-                        ]
-                    },
-                    "avatarUrl": {
-                        "type": "number",
-                        "description": "User avatar",
-                        "example": "avatar.jpg"
-                    },
-                    "dailyWater": {
-                        "type": "string",
-                        "example": "40"
-                    }
+    {
+      "name": "User",
+      "description": "User endpoints"
+    },
+    {
+      "name": "recommended Foods",
+      "description": "Recommended Foods endpoints"
+    }
+  ],
+  "paths": {
+    "/api/auth/signup": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration",
+        "security": [],
+        "requestBody": {
+          "description": "Registration object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/signupRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful registration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/signupRespons"
                 }
-            },
-            "SigninRequest": {
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)"
+          },
+          "409": {
+            "description": "Email already in use"
+          }
+        }
+      }
+    },
+    "/api/auth/signin": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User signin",
+        "parameters": [],
+        "requestBody": {
+          "description": "signin object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SigninRequest",
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SigninResponse",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/auth/signout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User Signout",
+        "parameters": [],
+        "requestBody": {
+          "description": "Signout ",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
                 "type": "object",
                 "properties": {
-                    "email": {
-                        "type": "string",
-                        "format": "email",
-                        "description": "User email",
-                        "example": "qwerty123@gmail.com"
-                    },
-                    "password": {
-                        "type": "string",
-                        "description": "User password",
-                        "example": "qwerty12345"
-                    }
+                  "token": {
+                    "type": "string",
+                    "description": "Authentication token for the Signned-in user",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpFjOGJiO"
+                  }
                 },
-                "required": [
-                    "email",
-                    "password"
-                ]
-            },
-            "SigninResponse": {
-                "type": "object",
-                "properties": {
+                "required": ["token"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Logout success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
                     "status": {
-                        "example": "success"
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Logout successful"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request (invalid token)",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/auth/forgotPassword": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Forgot Password",
+        "parameters": [],
+        "requestBody": {
+          "description": "Forgot Password object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest",
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "User email",
+                    "example": "qwerty123@gmail.com"
+                  }
+                },
+                "required": ["email"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Check your email"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "401": {
+            "description": "Email not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/user/current": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get current user",
+        "responses": {
+          "200": {
+            "description": "Successful retrieval of the current user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentUserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/user/update": {
+      "put": {
+        "tags": ["User"],
+        "summary": "Update user information",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "Authentication token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated user information object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful update of user information"
+          },
+          "400": {
+            "description": "Bad request (invalid request body)"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/api/user/update-avatar": {
+      "put": {
+        "tags": ["User"],
+        "summary": "Update user avatar",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "Authentication token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated user avatar object",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UserAvatarUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful update of user avatar"
+          },
+          "400": {
+            "description": "Bad request (invalid request body)"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          }
+        }
+      }
+    },
+    "/api/user/goal": {
+      "put": {
+        "tags": ["User"],
+        "summary": "Get user goal",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "Authentication token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful retrieval of user goal",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "goal": {
+                      "type": "string",
+                      "example": "lose fat"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/api/user/weight": {
+      "put": {
+        "tags": ["User"],
+        "summary": "Update user weight",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "Authentication token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated user weight object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserWeightUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Weight unchanged for specified date"
+          },
+          "400": {
+            "description": "Bad request (invalid request body)"
+          },
+          "404": {
+            "description": "That user does not exists"
+          }
+        }
+      }
+    },
+    "/api/user/water-intake": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Add water consumption",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "Authentication token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Water consumption object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/water-intakeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful update of water"
+          },
+          "400": {
+            "description": "Bad request (invalid request body)"
+          },
+          "500": {
+            "description": "Failed to update water"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["User"],
+        "summary": "Delete water consumption",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "Authentication token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All water intake for ${date} deleted"
+          },
+          "400": {
+            "description": "Bad request (invalid request parameters)"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          }
+        }
+      }
+    },
+    "/api/user/food-intake": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Add food intake",
+        "requestBody": {
+          "description": "Food intake object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "breakfast": {
+                    "type": "object",
+                    "properties": {
+                      "meals": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "mealId": {
+                              "type": "string",
+                              "example": "1"
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Eggs"
+                            },
+                            "calories": {
+                              "type": "number",
+                              "example": "70"
+                            },
+                            "fat": {
+                              "type": "number",
+                              "example": "5"
+                            },
+                            "carbohydrates": {
+                              "type": "number",
+                              "example": "1"
+                            },
+                            "protein": {
+                              "type": "number",
+                              "example": "6"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "lunch": {
+                    "type": "object",
+                    "properties": {
+                      "meals": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "mealId": {
+                              "type": "string",
+                              "example": "2"
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Chicken Salad"
+                            },
+                            "calories": {
+                              "type": "number",
+                              "example": "200"
+                            },
+                            "fat": {
+                              "type": "number",
+                              "example": "8"
+                            },
+                            "carbohydrates": {
+                              "type": "number",
+                              "example": "10"
+                            },
+                            "protein": {
+                              "type": "number",
+                              "example": "20"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "dinner": {
+                    "type": "object",
+                    "properties": {
+                      "meals": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "mealId": {
+                              "type": "string",
+                              "example": "3"
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Grilled Salmon"
+                            },
+                            "calories": {
+                              "type": "number",
+                              "example": "200"
+                            },
+                            "fat": {
+                              "type": "number",
+                              "example": "8"
+                            },
+                            "carbohydrates": {
+                              "type": "number",
+                              "example": "5"
+                            },
+                            "protein": {
+                              "type": "number",
+                              "example": "20"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "snack": {
+                    "type": "object",
+                    "properties": {
+                      "meals": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "mealId": {
+                              "type": "string",
+                              "example": "4"
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Apple"
+                            },
+                            "calories": {
+                              "type": "number",
+                              "example": "50"
+                            },
+                            "fat": {
+                              "type": "number",
+                              "example": "0"
+                            },
+                            "carbohydrates": {
+                              "type": "number",
+                              "example": "14"
+                            },
+                            "protein": {
+                              "type": "number",
+                              "example": "0.5"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful food intake addition",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Food-intakeRespons",
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Meals added to existing food intake"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/food-intake/{mealId}": {
+      "put": {
+        "tags": ["User"],
+        "summary": "Update food intake",
+        "parameters": [
+          {
+            "name": "mealId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the meal to update",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated meal information",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Eggs"
+                  },
+                  "calories": {
+                    "type": "number",
+                    "example": "345"
+                  },
+                  "fat": {
+                    "type": "number",
+                    "example": "123"
+                  },
+                  "carbohydrates": {
+                    "type": "number",
+                    "example": "45"
+                  },
+                  "protein": {
+                    "type": "number",
+                    "example": "24"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful update of food intake",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
                     },
                     "code": {
-                        "type": "number",
-                        "example": 200
+                      "type": "number",
+                      "example": 200
                     },
-                    "token": {
-                        "description": "Authentication token for the logged-in user",
-
-                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6Ikp.."
-
-                    },
-                    "data": {
-                        "type": "object",
-                        "properties": {
-                            "name": {
-                                "type": "string",
-                                "example": "Ivan"
-                            },
-                            "weight": {
-                                "type": "number",
-                                "example": 80
-                            },
-                            "goal": {
-                                "type": "string",
-                                "example": "lose fat"
-                            },
-                            "avatarUrl": {
-                                "type": "string",
-                                "example": "avatar.jpg"
-                            },
-                            "dailyWater": {
-                                "type": "number",
-                                "example": 40
-                            }
-                        }
+                    "message": {
+                      "type": "string",
+                      "example": "Meal updated in ${targetType}"
                     }
+                  }
                 }
-            },
-            "ForgotPasswordRequest": {
-                "type": "object",
-                "properties": {
-                    "email": {
-                        "type": "string",
-                        "format": "email",
-                        "description": "User email",
-                        "example": "qwerty123@gmail.com"
-                    }
-                },"required": [
-                    "email"
-                ]
-            },
-            "CurrentUserResponse": {
-                "type": "object",
-                "properties": {
-                    "user": {
-                        "type": "object",
-                        "properties": {
-                            "name": {
-                                "type": "string",
-                                "description": "User name"
-                            },
-                            "age": {
-                                "type": "integer",
-                                "description": "User age"
-                            },
-                            "height": {
-                                "type": "number",
-                                "description": "User height"
-                            },
-                            "email": {
-                                "type": "string",
-                                "description": "User email"
-                            },
-                            "gender": {
-                                "type": "string",
-                                "description": "User gender"
-                            },
-                            "weight": {
-                                "type": "number",
-                                "description": "User weight"
-                            },
-                            "goal": {
-                                "type": "string",
-                                "description": "User goal"
-                            },
-                            "activity": {
-                                "type": "string",
-                                "description": "User activity "
-                            },
-                            "avatarUrl": {
-                                "type": "string",
-                                "description": "User avatar"
-                            },
-                            "dailyCalories": {
-                                "type": "number",
-                                "description": "User calories"
-                            },
-                            "dailyNutrition": {
-                                "type": "number",
-                                "description": "User Nutrition"
-                            },
-                            "dailyWater": {
-                                "type": "number",
-                                "description": "User water"
-                            }
-                        }
-                    }
-                }
-            },
-            "UserUpdateRequest": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string",
-                        "description": "user name"
-                    },"email": {
-                        "type": "string",
-                        "description": "user email"
-                    },"password":{
-                        "type":"string",
-                        "description": "user password"
-                    },
-                    "token":{
-                        "type":"number",
-                        "description":"user token"
-                    }, "avatarUrl": {
-                       "type":"string",
-                       "description":"user avatar"
-                    },
-                    "gender": {
-                        "type": "string",
-                        "description": "User avatar"
-                    },"age": {
-                        "type": "integer",
-                        "description": " user age."
-                    },"gender": {
-                        "type": "string",
-                        "description": " user gender."
-                    }, "height": {
-                        "type": "number",
-                        "description": "user height "
-                    }, "activity": {
-                        "type": "string",
-                        "description": "user activity "
-                    },
-                    "goal": {
-                        "type": "string",
-                        "description": " user goal."
-                    },   "dailyCalories": {
-                        "type": "number",
-                        "description": "user calories"
-                    },  "dailyWater": {
-                        "type": "number",
-                        "description": "user water"
-                    },
-                    "dailyNutrition": {
-                        "type": "number",
-                        "description": "user Nutrition"
-                    },"date":{
-                        "type":"string",
-                        "description":"user date"
-                    }
-                  
-                   
-                }
-            },
-            "UserAvatarUpdateRequest": {
-                "type": "object",
-                "properties": {
-                    "avatar": {
-                        "type": "string",
-                        "format": "binary",
-                        "description": "Binary data of the user avatar"
-                    }
-                } ,"required": [
-                    "avatar"
-                ]
-            },
-            "UserWeightUpdateRequest": {
-                "type": "object",
-                "properties": {
-                    "weight": {
-                        "type": "number",
-                        "description": "User weight",
-                        "example": "80"
-                    }
-                },"required": [
-                    "weight"
-                ]
-            },
-            "water-intakeRequest": {
-                "type": "object",
-                "properties": {
-                    "water": {
-                        "type": "number",
-                        "description": "Amount of water consumed"
-                    }
-                } ,"required": [
-                    "water"
-                ]
-            },
-            "Food-intakeRespons": {
-                "type": "object",
-                "properties": {
-                    "mealId": {
-                        "type": "string",
-                        "example": "Meal ID",
-                        "description": "Meal ID"
-                    },
-                    "name": {
-                        "type": "string",
-                        "example": "Chicken Salad",
-                        "description": "Name of the food"
-                    },
-                    "calories": {
-                        "type": "number",
-                        "example": 350.5,
-                        "description": "Calories content"
-                    },
-                    "fat": {
-                        "type": "number",
-                        "example": 15.2,
-                        "description": "Fat content"
-                    },
-                    "carbohydrates": {
-                        "type": "number",
-                        "example": 20.5,
-                        "description": "Carbohydrates content"
-                    },
-                    "protein": {
-                        "type": "number",
-                        "example": 25.0,
-                        "description": "Protein content"
-                    }
-                },
-                "required": [
-                    "mealId",
-                    "name",
-                    "calories",
-                    "fat",
-                    "carbohydrates",
-                    "protein"
-                ]
+              }
             }
-        },
-        "securitySchemes": {
-            "Bearer": {
-                "type": "http",
-                "scheme": "bearer",
-                "bearerFormat": "JWT"
-            }
+          }
         }
+      }
+    },
+    "delete": {
+      "tags": ["User"],
+      "summary": "Delete food intake by mealId",
+      "parameters": [
+        {
+          "name": "mealId",
+          "in": "path",
+          "description": "ID of the meal",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Meal deleted from ${targetType}"
+        },
+        "401": {
+          "description": "Unauthorized request"
+        },
+        "404": {
+          "description": "Meal not found in any section"
+        }
+      }
+    },
+    "/api/user/reset-meals/{mealType}": {
+      "delete": {
+        "tags": ["User"],
+        "summary": "Delete food intake by mealType",
+        "parameters": [
+          {
+            "name": "mealType",
+            "in": "path",
+            "description": "Type of the meal (e.g., breakfast, lunch, dinner)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "${mealType} intake reset to default values"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          },
+          "404": {
+            "description": "Food intake not found for the specified date"
+          }
+        }
+      }
+    },
+    "/api/user/current-data": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get current user data",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful retrieval of current user data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentUserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request"
+          }
+        }
+      }
+    },
+    "/api/user/statistics/{month}": {
+      "get": {
+        "tags": ["User"],
+        "parameters": [
+          {
+            "name": "month",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Month in string format ('December')"
+          }
+        ],
+        "get": {
+          "summary": "Get user statistics for a specific month",
+          "security": [
+            {
+              "token": []
+            }
+          ]
+        }
+      }
+    },
+    "/api/recommended-food": {
+      "get": {
+        "tags": ["recommendedFoods"],
+        "summary": "Get recommended foods",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request. Returns recommended foods.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "foods": [
+                    {
+                      "name": "Kale",
+                      "calories": 49,
+                      "protein": 0.67,
+                      "carbohydrates": 7.68,
+                      "fat": 0.3
+                    },
+                    {
+                      "name": "Strawberries",
+                      "calories": 32,
+                      "protein": 31,
+                      "carbohydrates": 0,
+                      "fat": 3.6
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
     }
+  },
+  "components": {
+    "schemas": {
+      "signupRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User email",
+            "example": "qwerty123@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password",
+            "example": "qwerty12345"
+          },
+          "name": {
+            "type": "string",
+            "description": "User name",
+            "example": "Ivan"
+          },
+          "goal": {
+            "type": "string",
+            "description": "User goal",
+            "example": "lose fat",
+            "enum": ["lose fat", "maintain", "gain muscle"]
+          },
+          "age": {
+            "type": "number",
+            "description": "User age",
+            "example": 18
+          },
+          "weight": {
+            "type": "number",
+            "description": "User weight",
+            "example": 80
+          },
+          "height": {
+            "type": "number",
+            "description": "User height",
+            "example": 183
+          },
+          "gender": {
+            "type": "string",
+            "example": "male",
+            "enum": ["male", "female"]
+          },
+          "activity": {
+            "type": "number",
+            "example": 1.2,
+            "enum": [1.2, 1.375, 1.55, 1.725, 1.9]
+          }
+        },
+        "required": ["email", "password", "name", "goal", "age"]
+      },
+      "signupRespons": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User name",
+            "example": "Ivan"
+          },
+          "weight": {
+            "type": "number",
+            "description": "User weight",
+            "example": 80
+          },
+          "goal": {
+            "type": "string",
+            "description": "User goal",
+            "example": "lose Fat",
+            "enum": ["lose Fat", "maintain", "gain muscle"]
+          },
+          "avatarUrl": {
+            "type": "number",
+            "description": "User avatar",
+            "example": "avatar.jpg"
+          },
+          "dailyWater": {
+            "type": "string",
+            "example": "40"
+          }
+        }
+      },
+      "SigninRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User email",
+            "example": "qwerty123@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password",
+            "example": "qwerty12345"
+          }
+        },
+        "required": ["email", "password"]
+      },
+      "SigninResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "example": "success"
+          },
+          "code": {
+            "type": "number",
+            "example": 200
+          },
+          "token": {
+            "description": "Authentication token for the logged-in user",
+
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6Ikp.."
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "Ivan"
+              },
+              "weight": {
+                "type": "number",
+                "example": 80
+              },
+              "goal": {
+                "type": "string",
+                "example": "lose fat"
+              },
+              "avatarUrl": {
+                "type": "string",
+                "example": "avatar.jpg"
+              },
+              "dailyWater": {
+                "type": "number",
+                "example": 40
+              }
+            }
+          }
+        }
+      },
+      "ForgotPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User email",
+            "example": "qwerty123@gmail.com"
+          }
+        },
+        "required": ["email"]
+      },
+      "CurrentUserResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "User name"
+              },
+              "age": {
+                "type": "integer",
+                "description": "User age"
+              },
+              "height": {
+                "type": "number",
+                "description": "User height"
+              },
+              "email": {
+                "type": "string",
+                "description": "User email"
+              },
+              "gender": {
+                "type": "string",
+                "description": "User gender"
+              },
+              "weight": {
+                "type": "number",
+                "description": "User weight"
+              },
+              "goal": {
+                "type": "string",
+                "description": "User goal"
+              },
+              "activity": {
+                "type": "string",
+                "description": "User activity "
+              },
+              "avatarUrl": {
+                "type": "string",
+                "description": "User avatar"
+              },
+              "dailyCalories": {
+                "type": "number",
+                "description": "User calories"
+              },
+              "dailyNutrition": {
+                "type": "number",
+                "description": "User Nutrition"
+              },
+              "dailyWater": {
+                "type": "number",
+                "description": "User water"
+              }
+            }
+          }
+        }
+      },
+      "UserUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "user name"
+          },
+          "email": {
+            "type": "string",
+            "description": "user email"
+          },
+          "password": {
+            "type": "string",
+            "description": "user password"
+          },
+          "token": {
+            "type": "number",
+            "description": "user token"
+          },
+          "avatarUrl": {
+            "type": "string",
+            "description": "user avatar"
+          },
+          "weight": {
+            "type": "number",
+            "description": "user weight"
+          },
+          "age": {
+            "type": "integer",
+            "description": " user age."
+          },
+          "gender": {
+            "type": "string",
+            "description": " user gender."
+          },
+          "height": {
+            "type": "number",
+            "description": "user height "
+          },
+          "activity": {
+            "type": "string",
+            "description": "user activity "
+          },
+          "goal": {
+            "type": "string",
+            "description": " user goal."
+          },
+          "dailyCalories": {
+            "type": "number",
+            "description": "user calories"
+          },
+          "dailyWater": {
+            "type": "number",
+            "description": "user water"
+          },
+          "dailyNutrition": {
+            "type": "number",
+            "description": "user Nutrition"
+          },
+          "date": {
+            "type": "string",
+            "description": "user date"
+          }
+        }
+      },
+      "UserAvatarUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "avatar": {
+            "type": "string",
+            "format": "binary",
+            "description": "Binary data of the user avatar"
+          }
+        },
+        "required": ["avatar"]
+      },
+      "UserWeightUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "weight": {
+            "type": "number",
+            "description": "User weight",
+            "example": "80"
+          }
+        },
+        "required": ["weight"]
+      },
+      "water-intakeRequest": {
+        "type": "object",
+        "properties": {
+          "water": {
+            "type": "number",
+            "description": "Amount of water consumed"
+          }
+        },
+        "required": ["water"]
+      },
+      "Food-intakeRespons": {
+        "type": "object",
+        "properties": {
+          "mealId": {
+            "type": "string",
+            "example": "Meal ID",
+            "description": "Meal ID"
+          },
+          "name": {
+            "type": "string",
+            "example": "Chicken Salad",
+            "description": "Name of the food"
+          },
+          "calories": {
+            "type": "number",
+            "example": 350.5,
+            "description": "Calories content"
+          },
+          "fat": {
+            "type": "number",
+            "example": 15.2,
+            "description": "Fat content"
+          },
+          "carbohydrates": {
+            "type": "number",
+            "example": 20.5,
+            "description": "Carbohydrates content"
+          },
+          "protein": {
+            "type": "number",
+            "example": 25.0,
+            "description": "Protein content"
+          }
+        },
+        "required": [
+          "mealId",
+          "name",
+          "calories",
+          "fat",
+          "carbohydrates",
+          "protein"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
 }
