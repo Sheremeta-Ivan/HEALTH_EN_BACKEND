@@ -32,7 +32,7 @@ const calculateDailyWater = (userData) => {
   }
 
   return (
-    weight * BASE_WATER_REQUIREMENT_COEFFICIENT * ACTIVITY_COEFFICIENT * 1000
+    (weight * BASE_WATER_REQUIREMENT_COEFFICIENT + ACTIVITY_COEFFICIENT) * 1000
   );
 };
 
