@@ -8,7 +8,7 @@ const { authenticate, validateBody } = require("../../middlewares");
 const { schemas } = require("../../models/weight");
 
 router.put(
-  "/weight",
+  "",
   authenticate,
   validateBody(schemas.joiWeightSchema),
   ctrl.updateWeight

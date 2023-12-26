@@ -8,12 +8,12 @@ const { authenticate, validateBody } = require("../../middlewares");
 const { schemas } = require("../../models/water");
 
 router.post(
-  "/water-intake",
+  "",
   authenticate,
   validateBody(schemas.joiWaterSchema),
   ctrl.addWater
 );
 
-router.delete("/water-intake", authenticate, ctrl.deleteWater);
+router.delete("", authenticate, ctrl.deleteWater);
 
 module.exports = router;
