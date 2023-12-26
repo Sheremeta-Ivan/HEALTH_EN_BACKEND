@@ -62,7 +62,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/signupRequest"
+                                    "$ref": "#/components/schemas/signupRespons"
                                 }
                             }
                         }
@@ -96,7 +96,7 @@
                     }
                 },
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "Successful login",
                         "content": {
                             "application/json": {
@@ -144,7 +144,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Successful logout",
+                        "description": "Logout success",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -153,10 +153,6 @@
                                         "status": {
                                             "type": "string",
                                             "example": "success"
-                                        },
-                                        "code": {
-                                            "type": "number",
-                                            "example": 200
                                         },
                                         "message": {
                                             "type": "string",
@@ -216,13 +212,9 @@
                                             "type": "string",
                                             "example": "success"
                                         },
-                                        "code": {
-                                            "type": "number",
-                                            "example": 200
-                                        },
                                         "message": {
                                             "type": "string",
-                                            "example": "Password instructions sent to your email."
+                                            "example": "Check your email"
                                         }
                                     }
                                 }
@@ -233,8 +225,8 @@
                         "description": "Bad request (invalid request body)",
                         "content": {}
                     },
-                    "404": {
-                        "description": "User not found",
+                    "401": {
+                        "description": "Email not found",
                         "content": {}
                     }
                 }
@@ -373,7 +365,7 @@
                                     "properties": {
                                         "goal": {
                                             "type": "string",
-                                            "example": "Lose Fat"
+                                            "example": "lose fat"
                                         }
                                     }
                                 }
@@ -416,7 +408,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Successful update of user weight"
+                        "description": "Weight unchanged for specified date"
                     },
                     "400": {
                         "description": "Bad request (invalid request body)"
@@ -456,14 +448,14 @@
                     }
                 },
                 "responses": {
-                    "201": {
-                        "description": "Successful addition of water consumption"
+                    "200": {
+                        "description": "Successful update of water"
                     },
                     "400": {
                         "description": "Bad request (invalid request body)"
                     },
-                    "401": {
-                        "description": "Unauthorized request"
+                    "500": {
+                        "description": "Failed to update water"
                     }
                 }
             },
@@ -485,7 +477,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful delete of water consumption"
+                        "description": "All water intake for ${date} deleted"
                     },
                     "400": {
                         "description": "Bad request (invalid request parameters)"
@@ -664,7 +656,7 @@
                     }
                 },
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "Successful food intake addition",
                         "content": {
                             "application/json": {
@@ -676,13 +668,9 @@
                                             "type": "string",
                                             "example": "success"
                                         },
-                                        "code": {
-                                            "type": "number",
-                                            "example": 201
-                                        },
                                         "message": {
                                             "type": "string",
-                                            "example": "Food intake added successfully"
+                                            "example": "Meals added to existing food intake"
                                         }
                                     }
                                 }
@@ -760,7 +748,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Food intake updated successfully"
+                                            "example": "Meal updated in ${targetType}"
                                         }
                                     }
                                 }
@@ -788,13 +776,13 @@
             ],
             "responses": {
                 "200": {
-                    "description": "Food intake deleted successfully"
+                    "description": "Meal deleted from ${targetType}"
                 },
                 "401": {
                     "description": "Unauthorized request"
                 },
                 "404": {
-                    "description": "Food intake not found"
+                    "description": "Meal not found in any section"
                 }
             }
         },
@@ -817,13 +805,13 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Food intake deleted successfully"
+                        "description": "${mealType} intake reset to default values"
                     },
                     "401": {
                         "description": "Unauthorized request"
                     },
                     "404": {
-                        "description": "Food intake not found"
+                        "description": "Food intake not found for the specified date"
                     }
                 }
             }
@@ -919,8 +907,8 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized request. A valid token is required."
+                    "404": {
+                        "description": "Not found"
                     }
                 }
             }
@@ -950,9 +938,9 @@
                     "goal": {
                         "type": "string",
                         "description": "User goal",
-                        "example": "lose Fat",
+                        "example": "lose fat",
                         "enum": [
-                            "lose Fat",
+                            "lose fat",
                             "maintain",
                             "gain muscle"
                         ]
@@ -1000,6 +988,40 @@
                     "age"
                 ]
             },
+            "signupRespons": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "User name",
+                        "example": "Ivan"
+                    },
+                    "weight": {
+                        "type": "number",
+                        "description": "User weight",
+                        "example": 80
+                    },
+                    "goal": {
+                        "type": "string",
+                        "description": "User goal",
+                        "example": "lose Fat",
+                        "enum": [
+                            "lose Fat",
+                            "maintain",
+                            "gain muscle"
+                        ]
+                    },
+                    "avatarUrl": {
+                        "type": "number",
+                        "description": "User avatar",
+                        "example": "avatar.jpg"
+                    },
+                    "dailyWater": {
+                        "type": "string",
+                        "example": "40"
+                    }
+                }
+            },
             "SigninRequest": {
                 "type": "object",
                 "properties": {
@@ -1034,43 +1056,30 @@
                     "token": {
                         "type": "string",
                         "description": "Authentication token for the logged-in user",
-                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6Ikp"
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6Ikp.."
                     },
-                    "user": {
+                    "data": {
                         "type": "object",
                         "properties": {
-                            "email": {
-                                "type": "string",
-                                "format": "email",
-                                "example": "qwerty123@gmail.com"
-                            },
                             "name": {
                                 "type": "string",
                                 "example": "Ivan"
-                            },
-                            "goal": {
-                                "type": "string",
-                                "example": "lose Fat"
-                            },
-                            "gender": {
-                                "type": "string",
-                                "example": "male"
-                            },
-                            "age": {
-                                "type": "number",
-                                "example": 18
-                            },
-                            "height": {
-                                "type": "number",
-                                "example": 183
                             },
                             "weight": {
                                 "type": "number",
                                 "example": 80
                             },
-                            "activity": {
+                            "goal": {
+                                "type": "string",
+                                "example": "lose fat"
+                            },
+                            "avatarUrl": {
+                                "type": "string",
+                                "example": "avatar.jpg"
+                            },
+                            "dailyWater": {
                                 "type": "number",
-                                "example": 1.5
+                                "example": 40
                             }
                         }
                     }
@@ -1090,28 +1099,12 @@
             "CurrentUserResponse": {
                 "type": "object",
                 "properties": {
-                    "code": {
-                        "type": "integer",
-                        "description": "Status code"
-                    },
-                    "status": {
-                        "type": "string",
-                        "description": "Status message"
-                    },
                     "user": {
                         "type": "object",
                         "properties": {
-                            "email": {
-                                "type": "string",
-                                "description": "User email"
-                            },
                             "name": {
                                 "type": "string",
                                 "description": "User name"
-                            },
-                            "goal": {
-                                "type": "string",
-                                "description": "User goal"
                             },
                             "age": {
                                 "type": "integer",
@@ -1121,17 +1114,41 @@
                                 "type": "number",
                                 "description": "User height"
                             },
-                            "weight": {
-                                "type": "number",
-                                "description": "User weight"
+                            "email": {
+                                "type": "string",
+                                "description": "User email"
                             },
                             "gender": {
                                 "type": "string",
                                 "description": "User gender"
                             },
+                            "weight": {
+                                "type": "number",
+                                "description": "User weight"
+                            },
+                            "goal": {
+                                "type": "string",
+                                "description": "User goal"
+                            },
                             "activity": {
                                 "type": "string",
                                 "description": "User activity "
+                            },
+                            "avatarUrl": {
+                                "type": "string",
+                                "description": "User avatar"
+                            },
+                            "dailyCalories": {
+                                "type": "number",
+                                "description": "User calories"
+                            },
+                            "dailyNutrition": {
+                                "type": "number",
+                                "description": "User Nutrition"
+                            },
+                            "dailyWater": {
+                                "type": "number",
+                                "description": "User water"
                             }
                         }
                     }
@@ -1143,31 +1160,52 @@
                     "name": {
                         "type": "string",
                         "description": "user name"
+                    },"email": {
+                        "type": "string",
+                        "description": "user email"
+                    },"password":{
+                        "type":"string",
+                        "description": "user password"
+
+                    },
+                    "token":{
+                        "type":"number",
+                        "description":"user token"
+                    }, "avatarUrl": {
+                        "type": "string",
+                        "description": "User avatar"
+                    },"age": {
+                        "type": "integer",
+                        "description": " user age."
+                    },"gender": {
+                        "type": "string",
+                        "description": " user gender."
+                    }, "height": {
+                        "type": "number",
+                        "description": "user height "
+                    }, "activity": {
+                        "type": "string",
+                        "description": "user activity "
                     },
                     "goal": {
                         "type": "string",
                         "description": " user goal."
-                    },
-                    "gender": {
-                        "type": "string",
-                        "description": " user gender."
-                    },
-                    "age": {
-                        "type": "integer",
-                        "description": " user age."
-                    },
-                    "height": {
+                    },   "dailyCalories": {
                         "type": "number",
-                        "description": "user height "
-                    },
-                    "weight": {
+                        "description": "user calories"
+                    },  "dailyWater": {
                         "type": "number",
-                        "description": " user weight"
+                        "description": "user water"
                     },
-                    "activity": {
-                        "type": "string",
-                        "description": "user activity "
+                    "dailyNutrition": {
+                        "type": "number",
+                        "description": "user Nutrition"
+                    },"date":{
+                        "type":"string",
+                        "description":"user date"
                     }
+                  
+                   
                 }
             },
             "UserAvatarUpdateRequest": {
