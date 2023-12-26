@@ -44,7 +44,11 @@
                     "Auth"
                 ],
                 "summary": "User registration",
-                "security": [],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "requestBody": {
                     "description": "Registration object",
                     "required": true,
@@ -81,7 +85,11 @@
                 "tags": [
                     "Auth"
                 ],
-                "summary": "User signin",
+                "summary": "User signin","security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "parameters": [],
                 "requestBody": {
                     "description": "signin object",
@@ -120,6 +128,11 @@
                     "Auth"
                 ],
                 "summary": "User Signout",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "parameters": [],
                 "requestBody": {
                     "description": "Signout ",
@@ -176,6 +189,11 @@
                     "Auth"
                 ],
                 "summary": "Forgot Password",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "parameters": [],
                 "requestBody": {
                     "description": "Forgot Password object",
@@ -238,6 +256,11 @@
                     "User"
                 ],
                 "summary": "Get current user",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful retrieval of the current user",
@@ -262,6 +285,11 @@
                     "User"
                 ],
                 "summary": "Update user information",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "token",
@@ -303,6 +331,11 @@
                     "User"
                 ],
                 "summary": "Update user avatar",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "token",
@@ -344,6 +377,11 @@
                     "User"
                 ],
                 "summary": "Get user goal",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "token",
@@ -384,6 +422,11 @@
                     "User"
                 ],
                 "summary": "Update user weight",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "token",
@@ -425,6 +468,11 @@
                     "User"
                 ],
                 "summary": "Add water consumption",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "token",
@@ -464,6 +512,11 @@
                     "User"
                 ],
                 "summary": "Delete water consumption",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "token",
@@ -494,6 +547,11 @@
                     "User"
                 ],
                 "summary": "Add food intake",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "requestBody": {
                     "description": "Food intake object",
                     "required": true,
@@ -686,6 +744,11 @@
                     "User"
                 ],
                 "summary": "Update food intake",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "mealId",
@@ -763,6 +826,11 @@
                 "User"
             ],
             "summary": "Delete food intake by mealId",
+            "security": [
+                {
+                    "Bearer": []
+                }
+            ],
             "parameters": [
                 {
                     "name": "mealId",
@@ -792,6 +860,11 @@
                     "User"
                 ],
                 "summary": "Delete food intake by mealType",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "mealType",
@@ -848,6 +921,10 @@
             "get": {
                 "tags": [
                     "User"
+                ],"security": [
+                    {
+                        "Bearer": []
+                    }
                 ],
                 "parameters": [
                     {
@@ -1160,52 +1237,59 @@
                     "name": {
                         "type": "string",
                         "description": "user name"
-                    },"email": {
+                    },
+                    "email": {
                         "type": "string",
                         "description": "user email"
-                    },"password":{
-                        "type":"string",
-                        "description": "user password"
-
                     },
-                    "token":{
-                        "type":"number",
-                        "description":"user token"
-                    }, "avatarUrl": {
+                    "password": {
+                        "type": "string",
+                        "description": "user password"
+                    },
+                    "token": {
+                        "type": "number",
+                        "description": "user token"
+                    },
+                    "avatarUrl": {
                         "type": "string",
                         "description": "User avatar"
-                    },"age": {
+                    },
+                    "age": {
                         "type": "integer",
                         "description": " user age."
-                    },"gender": {
+                    },
+                    "gender": {
                         "type": "string",
                         "description": " user gender."
-                    }, "height": {
+                    },
+                    "height": {
                         "type": "number",
                         "description": "user height "
-                    }, "activity": {
+                    },
+                    "activity": {
                         "type": "string",
                         "description": "user activity "
                     },
                     "goal": {
                         "type": "string",
                         "description": " user goal."
-                    },   "dailyCalories": {
+                    },
+                    "dailyCalories": {
                         "type": "number",
                         "description": "user calories"
-                    },  "dailyWater": {
+                    },
+                    "dailyWater": {
                         "type": "number",
                         "description": "user water"
                     },
                     "dailyNutrition": {
                         "type": "number",
                         "description": "user Nutrition"
-                    },"date":{
-                        "type":"string",
-                        "description":"user date"
+                    },
+                    "date": {
+                        "type": "string",
+                        "description": "user date"
                     }
-                  
-                   
                 }
             },
             "UserAvatarUpdateRequest": {
