@@ -76,6 +76,7 @@ const register = async (req, res) => {
       weight: data.weight,
       goal: data.goal,
       avatarURL: data.avatarURL,
+      dailyWater: data.dailyWater,
     },
   });
 };
@@ -114,6 +115,7 @@ const login = async (req, res) => {
       weight: data.weight,
       goal: data.goal,
       avatarURL: data.avatarURL,
+      dailyWater: data.dailyWater,
     },
   });
 };

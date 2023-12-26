@@ -81,7 +81,7 @@ const updateFood = async (req, res) => {
   const { mealId } = req.params;
 
   const updatedMeal = {
-    mealId, 
+    mealId,
     name: req.body.name,
     calories: req.body.calories,
     fat: req.body.fat,
@@ -251,8 +251,8 @@ const getCurrentData = async (req, res) => {
   }).exec();
 
   const data = {
-    food: existingFood,
-    water: existingWater.water,
+    food: existingFood ?? {},
+    water: (existingWater && existingWater.water) ?? 0,
   };
 
   res.status(200).json({ data });
