@@ -40,7 +40,7 @@ This readme provides an overview of the backend application's functionality, inc
 - [Food Intake Recording](#food-intake-recording)
 - [Water Consumption Recording](#water-consumption-recording)
 - [Calorie Count Recording](#calorie-count-recording)
-- [Swagger Documentation](#swager)
+- [Swagger Documentation](#swagger-documentation)
 
 ## Authentication
 
