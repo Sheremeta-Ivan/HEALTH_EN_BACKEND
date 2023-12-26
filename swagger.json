@@ -1083,7 +1083,9 @@
                         "description": "User email",
                         "example": "qwerty123@gmail.com"
                     }
-                }
+                },"required": [
+                    "email"
+                ]
             },
             "CurrentUserResponse": {
                 "type": "object",
@@ -1172,7 +1174,9 @@
                         "format": "binary",
                         "description": "Binary data of the user avatar"
                     }
-                }
+                } ,"required": [
+                    "avatar"
+                ]
             },
             "UserWeightUpdateRequest": {
                 "type": "object",
@@ -1182,7 +1186,9 @@
                         "description": "User weight",
                         "example": "80"
                     }
-                }
+                },"required": [
+                    "weight"
+                ]
             },
             "water-intakeRequest": {
                 "type": "object",
@@ -1191,7 +1197,9 @@
                         "type": "number",
                         "description": "Amount of water consumed"
                     }
-                }
+                } ,"required": [
+                    "water"
+                ]
             },
             "Food-intakeRespons": {
                 "type": "object",
