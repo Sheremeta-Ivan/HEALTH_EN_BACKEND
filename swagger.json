@@ -33,7 +33,7 @@
             "description": "User endpoints"
         },
         {
-            "name": "recommendedFoods",
+            "name": "recommended Foods",
             "description": "Recommended Foods endpoints"
         }
     ],
