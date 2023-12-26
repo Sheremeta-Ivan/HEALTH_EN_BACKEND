@@ -240,7 +240,7 @@
                 }
             }
         },
-        "/api/users/getCurrentt": {
+        "/api/user/current": {
             "get": {
                 "tags": [
                     "User"
@@ -264,7 +264,7 @@
                 }
             }
         },
-        "/api/users/updateInfo": {
+        "/api/user/update": {
             "put": {
                 "tags": [
                     "User"
@@ -287,7 +287,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/UserUpdatInfoRequest"
+                                "$ref": "#/components/schemas/UserUpdateRequest"
                             }
                         }
                     }
@@ -305,7 +305,7 @@
                 }
             }
         },
-        "/api/users/update-avatar": {
+        "/api/user/update-avatar": {
             "put": {
                 "tags": [
                     "User"
@@ -346,7 +346,7 @@
                 }
             }
         },
-        "/api/users/goal": {
+        "/api/user/goal": {
             "put": {
                 "tags": [
                     "User"
@@ -373,7 +373,7 @@
                                     "properties": {
                                         "goal": {
                                             "type": "string",
-                                            "example": "Lose Fat"
+                                            "example": "lose fat"
                                         }
                                     }
                                 }
@@ -386,7 +386,7 @@
                 }
             }
         },
-        "/api/users/weight": {
+        "/api/user/weight": {
             "put": {
                 "tags": [
                     "User"
@@ -427,7 +427,7 @@
                 }
             }
         },
-        "/api/users/water-intake": {
+        "/api/user/water-intake": {
             "post": {
                 "tags": [
                     "User"
@@ -496,7 +496,7 @@
                 }
             }
         },
-        "/api/users/food-intake": {
+        "/api/user/food-intake": {
             "post": {
                 "tags": [
                     "User"
@@ -534,7 +534,7 @@
                                                             "type": "number",
                                                             "example": "5"
                                                         },
-                                                        "carbonohidretes": {
+                                                        "carbohydrates": {
                                                             "type": "number",
                                                             "example": "1"
                                                         },
@@ -571,7 +571,7 @@
                                                             "type": "number",
                                                             "example": "8"
                                                         },
-                                                        "carbonohidretes": {
+                                                        "carbohydrates": {
                                                             "type": "number",
                                                             "example": "10"
                                                         },
@@ -608,7 +608,7 @@
                                                             "type": "number",
                                                             "example": "8"
                                                         },
-                                                        "carbonohidretes": {
+                                                        "carbohydrates": {
                                                             "type": "number",
                                                             "example": "5"
                                                         },
@@ -645,7 +645,7 @@
                                                             "type": "number",
                                                             "example": "0"
                                                         },
-                                                        "carbonohidretes": {
+                                                        "carbohydrates": {
                                                             "type": "number",
                                                             "example": "14"
                                                         },
@@ -729,7 +729,7 @@
                                         "type": "number",
                                         "example": "123"
                                     },
-                                    "carbonohidrates": {
+                                    "carbohydrates": {
                                         "type": "number",
                                         "example": "45"
                                     },
@@ -828,7 +828,7 @@
                 }
             }
         },
-        "/api/users/current-data": {
+        "/api/user/current-data": {
             "get": {
                 "tags": [
                     "User"
@@ -901,18 +901,18 @@
                                 "example": {
                                     "foods": [
                                         {
-                                            "name": "banana",
-                                            "calories": 100,
-                                            "protein": 10,
-                                            "carbohydrates": 20,
-                                            "fat": 5
+                                            "name": "Kale",
+                                            "calories": 49,
+                                            "protein": 0.67,
+                                            "carbohydrates": 7.68,
+                                            "fat": 0.3
                                         },
                                         {
-                                            "name": "Salad with beans, chicken and corn",
-                                            "calories": 150,
-                                            "protein": 15,
-                                            "carbohydrates": 25,
-                                            "fat": 7
+                                            "name": "Strawberries",
+                                            "calories": 32,
+                                            "protein": 31,
+                                            "carbohydrates": 0,
+                                            "fat": 3.6
                                         }
                                     ]
                                 }
@@ -950,9 +950,9 @@
                     "goal": {
                         "type": "string",
                         "description": "User goal",
-                        "example": "lose Fat",
+                        "example": "lose fat",
                         "enum": [
-                            "lose Fat",
+                            "lose fat",
                             "maintain",
                             "gain muscle"
                         ]
@@ -1013,18 +1013,17 @@
                         "type": "string",
                         "description": "User password",
                         "example": "qwerty12345"
-                    },
-                    "required": [
-                        "email",
-                        "password"
-                    ]
-                }
+                    }
+                },
+                "required": [
+                    "email",
+                    "password"
+                ]
             },
             "SigninResponse": {
                 "type": "object",
                 "properties": {
                     "status": {
-                        "type": "string",
                         "example": "success"
                     },
                     "code": {
@@ -1032,9 +1031,8 @@
                         "example": 200
                     },
                     "token": {
-                        "type": "string",
                         "description": "Authentication token for the logged-in user",
-                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6Ikp"
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6Ikp..."
                     },
                     "user": {
                         "type": "object",
@@ -1050,7 +1048,7 @@
                             },
                             "goal": {
                                 "type": "string",
-                                "example": "lose Fat"
+                                "example": "lose fat"
                             },
                             "gender": {
                                 "type": "string",
@@ -1137,16 +1135,12 @@
                     }
                 }
             },
-            "UserUpdatInfoRequest": {
+            "UserUpdateRequest": {
                 "type": "object",
                 "properties": {
                     "name": {
                         "type": "string",
                         "description": "user name"
-                    },
-                    "goal": {
-                        "type": "string",
-                        "description": " user goal."
                     },
                     "gender": {
                         "type": "string",
