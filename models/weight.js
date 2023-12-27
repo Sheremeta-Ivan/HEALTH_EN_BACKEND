@@ -29,7 +29,11 @@ const weightSchema = new Schema(
 
 const joiWeightSchema = Joi.object({
   date: Joi.string(),
-  weight: Joi.number().min(4).max(300).required(),
+  weight: Joi.number().min(4).max(300).required().messages({
+    "number.min": "Weight must be at least 4 kg.",
+    "number.max": "Weight must be at most 300 kg.",
+    "any.required": "Weight is required.",
+  }),
   owner: Joi.string(),
 });
 

@@ -123,59 +123,117 @@ const joiFoodSchema = Joi.object({
   breakfast: Joi.object({
     meals: Joi.array().items(
       Joi.object({
-        mealId: Joi.string().required(),
-        name: Joi.string().required(),
-        calories: Joi.number().required(),
-        fat: Joi.number().required(),
-        carbohydrates: Joi.number().required(),
-        protein: Joi.number().required(),
+        mealId: Joi.string().required().messages({
+          "any.required": "Meal ID is required.",
+        }),
+        name: Joi.string().required().messages({
+          "any.required": "Meal name is required.",
+        }),
+        calories: Joi.number().required().messages({
+          "any.required": "Calories are required.",
+        }),
+        fat: Joi.number().required().messages({
+          "any.required": "Fat content is required.",
+        }),
+        carbohydrates: Joi.number().required().messages({
+          "any.required": "Carbohydrate content is required.",
+        }),
+        protein: Joi.number().required().messages({
+          "any.required": "Protein content is required.",
+        }),
       })
     ),
   }).optional(),
   lunch: Joi.object({
     meals: Joi.array().items(
       Joi.object({
-        mealId: Joi.string().required(),
-        name: Joi.string().required(),
-        calories: Joi.number().required(),
-        fat: Joi.number().required(),
-        carbohydrates: Joi.number().required(),
-        protein: Joi.number().required(),
+        mealId: Joi.string().required().messages({
+          "any.required": "Meal ID is required.",
+        }),
+        name: Joi.string().required().messages({
+          "any.required": "Meal name is required.",
+        }),
+        calories: Joi.number().required().messages({
+          "any.required": "Calories are required.",
+        }),
+        fat: Joi.number().required().messages({
+          "any.required": "Fat content is required.",
+        }),
+        carbohydrates: Joi.number().required().messages({
+          "any.required": "Carbohydrate content is required.",
+        }),
+        protein: Joi.number().required().messages({
+          "any.required": "Protein content is required.",
+        }),
       })
     ),
   }).optional(),
   dinner: Joi.object({
     meals: Joi.array().items(
       Joi.object({
-        mealId: Joi.string().required(),
-        name: Joi.string().required(),
-        calories: Joi.number().required(),
-        fat: Joi.number().required(),
-        carbohydrates: Joi.number().required(),
-        protein: Joi.number().required(),
+        mealId: Joi.string().required().messages({
+          "any.required": "Meal ID is required.",
+        }),
+        name: Joi.string().required().messages({
+          "any.required": "Meal name is required.",
+        }),
+        calories: Joi.number().required().messages({
+          "any.required": "Calories are required.",
+        }),
+        fat: Joi.number().required().messages({
+          "any.required": "Fat content is required.",
+        }),
+        carbohydrates: Joi.number().required().messages({
+          "any.required": "Carbohydrate content is required.",
+        }),
+        protein: Joi.number().required().messages({
+          "any.required": "Protein content is required.",
+        }),
       })
     ),
   }).optional(),
   snack: Joi.object({
     meals: Joi.array().items(
       Joi.object({
-        mealId: Joi.string().required(),
-        name: Joi.string().required(),
-        calories: Joi.number().required(),
-        fat: Joi.number().required(),
-        carbohydrates: Joi.number().required(),
-        protein: Joi.number().required(),
+        mealId: Joi.string().required().messages({
+          "any.required": "Meal ID is required.",
+        }),
+        name: Joi.string().required().messages({
+          "any.required": "Meal name is required.",
+        }),
+        calories: Joi.number().required().messages({
+          "any.required": "Calories are required.",
+        }),
+        fat: Joi.number().required().messages({
+          "any.required": "Fat content is required.",
+        }),
+        carbohydrates: Joi.number().required().messages({
+          "any.required": "Carbohydrate content is required.",
+        }),
+        protein: Joi.number().required().messages({
+          "any.required": "Protein content is required.",
+        }),
       })
     ),
   }).optional(),
 });
 
 const joiUpdateFoodSchema = Joi.object({
-  name: Joi.string(),
-  calories: Joi.number(),
-  fat: Joi.number().min(0),
-  carbohydrates: Joi.number().min(0),
-  protein: Joi.number().min(0),
+  name: Joi.string().messages({
+    "string.empty": "Name cannot be empty.",
+  }),
+  calories: Joi.number().min(0).messages({
+    "number.min": "Calories must be greater than or equal to 0.",
+  }),
+  fat: Joi.number().min(0).messages({
+    "number.min": "Fat content must be greater than or equal to 0.",
+  }),
+  carbohydrates: Joi.number().min(0).messages({
+    "number.min": "Carbohydrate content must be greater than or equal to 0.",
+  }),
+  protein: Joi.number().min(0).messages({
+    "number.min": "Protein content must be greater than or equal to 0.",
+  }),
 });
 
 const schemas = { joiFoodSchema, joiUpdateFoodSchema };

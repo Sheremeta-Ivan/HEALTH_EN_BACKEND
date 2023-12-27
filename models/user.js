@@ -3,8 +3,7 @@ const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 const { handleMongooseError } = require("../helpers");
 const LocaleDate = require("../helpers/LocaleDate");
-
-const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+const { GENDERS, ACTIVITIES, GOALS, EMAIL } = require("../constants/userEnum");
 
 const userSchema = new Schema(
   {
@@ -18,7 +17,7 @@ const userSchema = new Schema(
 
     email: {
       type: String,
-      match: emailRegex,
+      match: EMAIL,
       unique: true,
       required: [true, "Email is required"],
     },
@@ -47,7 +46,7 @@ const userSchema = new Schema(
 
     gender: {
       type: String,
-      enum: ["male", "female"],
+      enum: GENDERS,
       required: [true, "Set gender for user"],
     },
 
@@ -67,13 +66,13 @@ const userSchema = new Schema(
 
     activity: {
       type: Number,
-      enum: [1.2, 1.375, 1.55, 1.725, 1.9],
+      enum: ACTIVITIES,
       required: [true, "Set activity for user"],
     },
 
     goal: {
       type: String,
-      enum: ["lose fat", "maintain", "gain muscle"],
+      enum: GOALS,
     },
 
     dailyCalories: {
@@ -100,15 +99,53 @@ const userSchema = new Schema(
 userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
-  name: Joi.string().min(2).max(30).required(),
-  email: Joi.string().pattern(emailRegex).required(),
-  password: Joi.string().min(8).required(),
-  age: Joi.number().min(8).max(120).required(),
-  gender: Joi.string().valid("male", "female").required(),
-  weight: Joi.number().min(4).max(300).required(),
-  height: Joi.number().min(120).max(220).required(),
-  goal: Joi.string().valid("lose fat", "maintain", "gain muscle").required(),
-  activity: Joi.number().valid(1.2, 1.375, 1.55, 1.725, 1.9).required(),
+  name: Joi.string().min(2).max(30).required().messages({
+    "string.min": "Name must be at least 2 characters long.",
+    "string.max": "Name must be at most 30 characters long.",
+    "any.required": "Name is required.",
+  }),
+  email: Joi.string().pattern(EMAIL).required().messages({
+    "string.pattern.base": "Invalid email address.",
+    "any.required": "Email is required.",
+  }),
+  password: Joi.string().min(8).required().messages({
+    "string.min": "Password must be at least 8 characters long.",
+    "any.required": "Password is required.",
+  }),
+  age: Joi.number().min(8).max(120).required().messages({
+    "number.min": "Age must be at least 8.",
+    "number.max": "Age must be at most 120.",
+    "any.required": "Age is required.",
+  }),
+  gender: Joi.string().valid("male", "female").required().messages({
+    "string.valid": "Gender must be either 'male' or 'female'.",
+    "any.required": "Gender is required.",
+  }),
+  weight: Joi.number().min(4).max(300).required().messages({
+    "number.min": "Weight must be at least 4.",
+    "number.max": "Weight must be at most 300.",
+    "any.required": "Weight is required.",
+  }),
+  height: Joi.number().min(120).max(220).required().messages({
+    "number.min": "Height must be at least 120.",
+    "number.max": "Height must be at most 220.",
+    "any.required": "Height is required.",
+  }),
+  goal: Joi.string()
+    .valid("lose fat", "maintain", "gain muscle")
+    .required()
+    .messages({
+      "string.valid":
+        "Goal must be one of 'lose fat', 'maintain', or 'gain muscle'.",
+      "any.required": "Goal is required.",
+    }),
+  activity: Joi.number()
+    .valid(1.2, 1.375, 1.55, 1.725, 1.9)
+    .required()
+    .messages({
+      "number.valid": "Activity level must be 1.2, 1.375, 1.55, 1.725, or 1.9.",
+      "any.required": "Activity level is required.",
+    }),
   dailyCalories: Joi.number(),
   dailyWater: Joi.number(),
   dailyNutrition: Joi.object({
@@ -120,28 +157,68 @@ const registerSchema = Joi.object({
 });
 
 const loginSchema = Joi.object({
-  email: Joi.string().pattern(emailRegex).required(),
-  password: Joi.string().min(8).required(),
+  email: Joi.string().pattern(EMAIL).required().messages({
+    "string.pattern.base": "Invalid email address.",
+    "any.required": "Email is required.",
+  }),
+  password: Joi.string().min(8).required().messages({
+    "string.min": "Password must be at least 8 characters long.",
+    "any.required": "Password is required.",
+  }),
 });
 
 const userResetPasswordSchema = Joi.object({
-  email: Joi.string().min(8).pattern(emailRegex).required(),
+  email: Joi.string().pattern(EMAIL).required().messages({
+    "string.pattern.base": "Invalid email address.",
+    "any.required": "Email is required.",
+  }),
 });
 
 const validateGoal = Joi.object({
-  goal: Joi.string().valid("lose fat", "maintain", "gain muscle").required(),
+  goal: Joi.string()
+    .valid("lose fat", "maintain", "gain muscle")
+    .required()
+    .messages({
+      "string.valid":
+        "Goal must be one of 'lose fat', 'maintain', or 'gain muscle'.",
+      "any.required": "Goal is required.",
+    }),
 });
 
 const validateUpdateInfo = Joi.object({
-  name: Joi.string().min(2).max(30).optional(),
-  email: Joi.string().pattern(emailRegex).optional(),
-  newPassword: Joi.string().min(8).optional(),
-  age: Joi.number().min(8).max(120).optional(),
-  gender: Joi.string().valid("male", "female").optional(),
-  weight: Joi.number().min(4).max(300).optional(),
-  height: Joi.number().min(120).max(220).optional(),
-  activity: Joi.number().valid(1.2, 1.375, 1.55, 1.725, 1.9).optional(),
+  name: Joi.string().min(2).max(30).optional().messages({
+    "string.min": "Name must be at least 2 characters long.",
+    "string.max": "Name must be at most 30 characters long.",
+  }),
+  email: Joi.string().pattern(EMAIL).optional().messages({
+    "string.pattern.base": "Invalid email address.",
+  }),
+  newPassword: Joi.string().min(8).optional().messages({
+    "string.min": "Password must be at least 8 characters long.",
+  }),
+  age: Joi.number().min(8).max(120).optional().messages({
+    "number.min": "Age must be at least 8.",
+    "number.max": "Age must be at most 120.",
+  }),
+  gender: Joi.string().valid("male", "female").optional().messages({
+    "string.valid": "Gender must be either 'male' or 'female'.",
+  }),
+  weight: Joi.number().min(4).max(300).optional().messages({
+    "number.min": "Weight must be at least 4.",
+    "number.max": "Weight must be at most 300.",
+  }),
+  height: Joi.number().min(120).max(220).optional().messages({
+    "number.min": "Height must be at least 120.",
+    "number.max": "Height must be at most 220.",
+  }),
+  activity: Joi.number()
+    .valid(1.2, 1.375, 1.55, 1.725, 1.9)
+    .optional()
+    .messages({
+      "number.valid": "Activity level must be 1.2, 1.375, 1.55, 1.725, or 1.9.",
+    }),
 });
+
 
 const schemas = {
   registerSchema,

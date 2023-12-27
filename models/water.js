@@ -33,7 +33,11 @@ waterSchema.post("save", handleMongooseError);
 
 const joiWaterSchema = Joi.object({
   date: Joi.string(),
-  water: Joi.number().min(0).max(10000).required(),
+  water: Joi.number().min(0).max(10000).required().messages({
+    "number.min": "Water intake must be at least 0 ml.",
+    "number.max": "Water intake must be at most 10000 ml.",
+    "any.required": "Water intake is required.",
+  }),
   owner: Joi.string(),
 });
 
