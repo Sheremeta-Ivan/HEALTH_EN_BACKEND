@@ -118,6 +118,11 @@
                     "Auth"
                 ],
                 "summary": "User Signout",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [],
                 "requestBody": {
                     "description": "Signout ",
@@ -130,7 +135,7 @@
                                     "token": {
                                         "type": "string",
                                         "description": "Authentication token for the Signned-in user",
-                                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpFjOGJiO"
+                                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpFjOGJiO..."
                                     }
                                 },
                                 "required": [
@@ -174,6 +179,11 @@
                     "Auth"
                 ],
                 "summary": "Forgot Password",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [],
                 "requestBody": {
                     "description": "Forgot Password object",
@@ -564,7 +574,7 @@
                                                             "type": "number",
                                                             "example": "5"
                                                         },
-                                                        "carbonohidretes": {
+                                                        "carbohydrates": {
                                                             "type": "number",
                                                             "example": "1"
                                                         },
@@ -601,7 +611,7 @@
                                                             "type": "number",
                                                             "example": "8"
                                                         },
-                                                        "carbonohidretes": {
+                                                        "carbohydrates": {
                                                             "type": "number",
                                                             "example": "10"
                                                         },
@@ -638,7 +648,7 @@
                                                             "type": "number",
                                                             "example": "8"
                                                         },
-                                                        "carbonohidretes": {
+                                                        "carbohydrates": {
                                                             "type": "number",
                                                             "example": "5"
                                                         },
@@ -675,7 +685,7 @@
                                                             "type": "number",
                                                             "example": "0"
                                                         },
-                                                        "carbonohidretes": {
+                                                        "carbohydrates": {
                                                             "type": "number",
                                                             "example": "14"
                                                         },
@@ -760,7 +770,7 @@
                                         "type": "number",
                                         "example": "123"
                                     },
-                                    "carbonohidrates": {
+                                    "carbohydrates": {
                                         "type": "number",
                                         "example": "45"
                                     },
@@ -886,7 +896,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/CurrentUserResponse"
+                                    "$ref": "#/components/schemas/CurrentdataResponse"
                                 }
                             }
                         }
@@ -902,11 +912,7 @@
                 "tags": [
                     "User"
                 ],
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
+                "summary": "Get User statistics",
                 "parameters": [
                     {
                         "name": "month",
@@ -918,13 +924,78 @@
                         "description": "Month in string format ('December')"
                     }
                 ],
-                "get": {
-                    "summary": "Get user statistics for a specific month",
-                    "security": [
-                        {
-                            "token": []
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Month in string format ('December')",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "month": {
+                                                    "type": "string",
+                                                    "example": "December"
+                                                },
+                                                "statistics": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "water": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "object",
+                                                                "properties": {
+                                                                    "value": {
+                                                                        "type": "number",
+                                                                        "example": 2000
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                        "weight": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "object",
+                                                                "properties": {
+                                                                    "value": {
+                                                                        "type": "number",
+                                                                        "example": 85
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                        "calories": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "object",
+                                                                "properties": {
+                                                                    "value": {
+                                                                        "type": "number",
+                                                                        "example": 5000
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
-                    ]
+                    }
                 }
             }
         },
@@ -947,18 +1018,18 @@
                                 "example": {
                                     "foods": [
                                         {
-                                            "name": "banana",
-                                            "calories": 100,
-                                            "protein": 10,
-                                            "carbohydrates": 20,
-                                            "fat": 5
+                                            "name": "Kale",
+                                            "calories": 49,
+                                            "protein": 0.67,
+                                            "carbohydrates": 7.68,
+                                            "fat": 0.3
                                         },
                                         {
-                                            "name": "Salad with beans, chicken and corn",
-                                            "calories": 150,
-                                            "protein": 15,
-                                            "carbohydrates": 25,
-                                            "fat": 7
+                                            "name": "Strawberries",
+                                            "calories": 32,
+                                            "protein": 31,
+                                            "carbohydrates": 0,
+                                            "fat": 3.6
                                         }
                                     ]
                                 }
@@ -1114,7 +1185,7 @@
                     "token": {
                         "type": "string",
                         "description": "Authentication token for the logged-in user",
-                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6Ikp.."
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6Ikp..."
                     },
                     "data": {
                         "type": "object",
@@ -1152,9 +1223,70 @@
                         "description": "User email",
                         "example": "qwerty123@gmail.com"
                     }
-                }
+                },
+                "required": [
+                    "email"
+                ]
             },
             "CurrentUserResponse": {
+                "type": "object",
+                "properties": {
+                    "user": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "description": "User name"
+                            },
+                            "age": {
+                                "type": "integer",
+                                "description": "User age"
+                            },
+                            "height": {
+                                "type": "number",
+                                "description": "User height"
+                            },
+                            "email": {
+                                "type": "string",
+                                "description": "User email"
+                            },
+                            "gender": {
+                                "type": "string",
+                                "description": "User gender"
+                            },
+                            "weight": {
+                                "type": "number",
+                                "description": "User weight"
+                            },
+                            "goal": {
+                                "type": "string",
+                                "description": "User goal"
+                            },
+                            "activity": {
+                                "type": "string",
+                                "description": "User activity "
+                            },
+                            "avatarUrl": {
+                                "type": "string",
+                                "description": "User avatar"
+                            },
+                            "dailyCalories": {
+                                "type": "number",
+                                "description": "User calories"
+                            },
+                            "dailyNutrition": {
+                                "type": "number",
+                                "description": "User Nutrition"
+                            },
+                            "dailyWater": {
+                                "type": "number",
+                                "description": "User water"
+                            }
+                        }
+                    }
+                }
+            },
+            "CurrentdataResponse": {
                 "type": "object",
                 "properties": {
                     "user": {
@@ -1163,12 +1295,12 @@
                             "food": {
                                 "type": "object",
                                 "description": "User food information",
-                                "example":"Eggs"
+                                "example": "Eggs"
                             },
                             "water": {
                                 "type": "number",
                                 "description": "User water intake",
-                                "example": 0
+                                "example": 40
                             }
                         }
                     }
@@ -1253,16 +1385,23 @@
                         "description": "User weight",
                         "example": "80"
                     }
-                }
+                },
+                "required": [
+                    "weight"
+                ]
             },
             "water-intakeRequest": {
                 "type": "object",
                 "properties": {
                     "water": {
                         "type": "number",
-                        "description": "Amount of water consumed"
+                        "description": "Amount of water consumed",
+                        "example":"40"
                     }
-                }
+                },
+                "required": [
+                    "water"
+                ]
             },
             "Food-intakeRespons": {
                 "type": "object",
