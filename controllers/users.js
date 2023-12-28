@@ -91,6 +91,7 @@ const updateInfo = async (req, res) => {
 
     return res.status(200).json({ data: user });
   }
+  return res.status(200).json({ data: user });
 };
 
 const updateAvatar = async (req, res) => {
